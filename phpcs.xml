@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="PHP_CodeSniffer" xsi:noNamespaceSchemaLocation="phpcs.xsd">
+	<!-- See https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml -->
+	<!-- See https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards -->
+	<!-- See https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki -->
+	<!-- See https://github.com/wimg/PHPCompatibility -->
+	<!-- See https://gitlab.com/IceHe/phpcs-ruleset/blob/master/ruleset.xml -->
+
+	<!-- Set a description for this ruleset. -->
+	<description>A custom set of code standard rules to check for WordPress themes.</description>
+
+
+	<!--
+	#############################################################################
+	COMMAND LINE ARGUMENTS
+	https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml
+	#############################################################################
+	-->
+
+	<!-- Pass some flags to PHPCS:
+		 p flag: Show progress of the run.
+		 s flag: Show sniff codes in all reports.
+		 v flag: Print verbose output.
+		 n flag: Do not print warnings. Su šituo kažkodėl kodo redaktorių sniferiai neformatuoja (phpcbf neveikia).
+	-->
+	<!-- <arg value="psvn"/> -->
+	<arg value="psv"/>
+
+	<!-- Check up to 8 files simultanously. -->
+	<arg name="parallel" value="8"/>
+
+	<!-- Only check the PHP, CSS and SCSS files. JS files are checked separately with ESLint. -->
+	<arg name="extensions" value="php,css,scss/css"/>
+
+	<!-- Check all files in this directory and the directories below it. -->
+	<file>.</file>
+
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+
+    <!-- ## Squiz.Commenting.FunctionComment -->
+    <!-- Parses and verifies the doc comments for functions -->
+    <!--    * DuplicateReturn: Only 1 @return tag is allowed in a function comment -->
+    <!--    * MissingReturnType: Return type missing for @return tag in function comment -->
+    <!--    * InvalidReturn: Expected "%s" but found "%s" for function return type -->
+    <!--    * InvalidReturnVoid: Function return type is void, but function contains return statement -->
+    <!--    * InvalidNoReturn: Function return type is not void, but function has no return statement -->
+    <!--    * InvalidReturnNotVoid: Function return type is not void, but function is returning void here -->
+    <!--    * MissingReturn: Missing @return tag in function comment -->
+    <!--    * InvalidThrows: Exception type and comment missing for @throws tag in function comment -->
+    <!--    * EmptyThrows: Comment missing for @throws tag in function comment -->
+    <!--    * ThrowsNotCapital: @throws tag comment must start with a capital letter -->
+    <!--    * ThrowsNoFullStop: @throws tag comment must end with a full stop -->
+    <!--    * MissingParamComment: Missing parameter comment -->
+    <!--    * MissingParamName: Missing parameter name -->
+    <!--    * MissingParamType: Missing parameter type -->
+    <!--    * (Scalar)TypeHintMissing: Type hint "%s" missing for %s -->
+    <!--    * IncorrectTypeHint: Expected type hint "%s"; found "%s" for %s -->
+    <!--    * InvalidTypeHint: Unknown type hint "%s" found for %s -->
+    <!--    * IncorrectParamVarName: Expected "%s" but found "%s" for parameter type -->
+    <!--    * ParamNameNoMatch: Doc comment for parameter %s does not match actual variable name %s -->
+    <!--    * ParamNameNoCaseMatch: Doc comment for parameter %s does not match case of actual variable name %s -->
+    <!--    * ExtraParamComment: Superfluous parameter comment -->
+    <!--    * ParamCommentNotCapital: Parameter comment must start with a capital letter -->
+    <!--    * ParamCommentFullStop: Parameter comment must end with a full stop -->
+    <!--    * MissingParamTag: Doc comment for parameter "%s" missing -->
+    <!--    * SpacingAfterParamType: Expected %s spaces after parameter type; %s found -->
+    <!--    * SpacingAfterParamName: Expected %s spaces after parameter name; %s found -->
+    <rule ref="Squiz.Commenting.FunctionComment">
+        <exclude name="Squiz.Commenting.FunctionComment.InvalidReturn"/>
+        <exclude name="Squiz.Commenting.FunctionComment.MissingReturn"/>
+        <exclude name="Squiz.Commenting.FunctionComment.EmptyThrows"/>
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
+        <exclude name="Squiz.Commenting.FunctionComment.TypeHintMissing"/>
+        <exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing"/>
+        <exclude name="Squiz.Commenting.FunctionComment.IncorrectParamVarName"/>
+        <exclude name="Squiz.Commenting.FunctionComment.ParamCommentNotCapital"/>
+        <exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop"/>
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamTag"/>
+    </rule>
+
+    <rule ref="Squiz.PHP.CommentedOutCode">
+        <exclude name="Squiz.PHP.CommentedOutCode.Found"/>
+    </rule>
+
+	<!--
+	#############################################################################
+	USE THE WordPress-Coding-Standards RULESET
+	#############################################################################
+	-->
+
+	<rule ref="WordPress"/>
+	<rule ref="WordPress-Core"/>
+	<rule ref="WordPress-Docs"/>
+	<rule ref="WordPress-Extra"/>
+
+	<!--
+	#############################################################################
+	SNIFF SPECIFIC CONFIGURATION
+	#############################################################################
+	-->
+
+	<!-- Verify that the text_domain is set to the desired text-domain.
+		 Multiple valid text domains can be provided as a comma-delimited list. -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array" value="anwas-scratch"/>
+		</properties>
+	</rule>
+
+	<!-- Allow for theme specific exceptions to the file name rules based
+		 on the theme hierarchy and ensure PSR-4 autoloading compatibility. -->
+	<rule ref="WordPress.Files.FileName">
+		<properties>
+			<property name="strict_class_file_names" value="false"/>
+			<property name="is_theme" value="true"/>
+		</properties>
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+	</rule>
+
+	<!-- Set the minimum supported WP version. This is used by several sniffs.
+		 The minimum version set here should be in line with the minimum WP version
+		 as set in the "Requires at least" tag in the readme.txt file. -->
+	<config name="minimum_supported_wp_version" value="5.8"/>
+
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment">
+		<properties>
+			<!-- No need to adjust alignment of large arrays when the item with the largest key is removed. -->
+			<property name="exact" value="false"/>
+			<!-- Don't align multi-line items if ALL items in the array are multi-line. -->
+			<property name="alignMultilineItems" value="!=100"/>
+			<!-- Array assignment operator should always be on the same line as the array key. -->
+			<property name="ignoreNewlines" value="false"/>
+		</properties>
+	</rule>
+
+	<!-- Exclude PrefixAllGlobals Sniff from WPCS and use the one from this ruleset -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<severity>0</severity>
+	</rule>
+
+	<rule ref="WordPress">
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals"/>
+	</rule>
+
+
+	<!--
+	#############################################################################
+	USE THE PHPCompatibility RULESET
+	#############################################################################
+	-->
+
+	<config name="testVersion" value="8.0-99.0"/>
+
+
+	<rule ref="PHPCompatibility">
+		<!-- Whitelist PHP native classes, interfaces, functions and constants which
+			 are back-filled by WP.
+
+			 Based on:
+			 * /wp-includes/compat.php
+			 * /wp-includes/random_compat/random.php
+		-->
+		<exclude name="PHPCompatibility.PHP.NewClasses.errorFound"/>
+		<exclude name="PHPCompatibility.PHP.NewClasses.typeerrorFound"/>
+
+		<exclude name="PHPCompatibility.PHP.NewConstants.json_pretty_printFound"/>
+		<exclude name="PHPCompatibility.PHP.NewConstants.php_version_idFound"/>
+
+		<exclude name="PHPCompatibility.PHP.NewFunctions.hash_equalsFound"/>
+		<exclude name="PHPCompatibility.PHP.NewFunctions.json_last_error_msgFound"/>
+		<exclude name="PHPCompatibility.PHP.NewFunctions.random_intFound"/>
+		<exclude name="PHPCompatibility.PHP.NewFunctions.random_bytesFound"/>
+		<exclude name="PHPCompatibility.PHP.NewFunctions.array_replace_recursiveFound"/>
+
+		<exclude name="PHPCompatibility.PHP.NewInterfaces.jsonserializableFound"/>
+	</rule>
+
+	<!-- Whitelist the WP Core mysql_to_rfc3339() function. -->
+	<rule ref="PHPCompatibility.Extensions.RemovedExtensions">
+		<properties>
+			<property name="functionWhitelist" type="array" value="mysql_to_rfc3339"/>
+		</properties>
+	</rule>
+
+	<rule ref="PHPCompatibilityWP"/>
+
+</ruleset>

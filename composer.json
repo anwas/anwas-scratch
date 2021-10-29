@@ -1,0 +1,15 @@
+{
+  "name": "anwas/anwas-scratch",
+  "autoload": {
+    "psr-4": {
+      "Anwas_Scratch\\": "classes/"
+    }
+  },
+  "authors": [
+    {
+      "name": "An Was",
+      "email": "anwas@lanbox.lt"
+    }
+  ],
+  "require": {}
+}
