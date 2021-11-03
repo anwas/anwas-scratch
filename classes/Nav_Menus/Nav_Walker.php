@@ -30,8 +30,9 @@ class Nav_Walker extends Walker_Nav_Menu {
 	 * @param stdClass $args   „wp_nav_menu()“ argumentų objektas.
 	 */
 	public function start_lvl( &$output, $depth = 0, $args = array() ) {
-		$indent       = str_repeat( "\t", $depth );
-		$submenu      = ( $depth > 0 ) ? ' sub-menu' : '';
+		$indent = str_repeat( "\t", $depth );
+		// $submenu      = ( $depth > 0 ) ? ' sub-menu' : '';
+		$submenu      = '';
 		$css_depth    = $depth + 1;
 		$css_menu_lvl = $depth + 2;
 		$output      .= "\n{$indent}<ul class=\"dropdown-menu{$submenu} depth-{$css_depth} menu-lvl-{$css_menu_lvl}\" >\n";
@@ -69,8 +70,10 @@ class Nav_Walker extends Walker_Nav_Menu {
 			unset( $classes[ $divider_class_position ] );
 		}
 
-		$classes[] = ( $args->has_children ) ? 'dropdown' : '';
+		// $classes[] = ( $args->has_children ) ? 'dropdown' : '';
+		$classes[] = ( $args->has_children && $depth ) ? 'dropend' : ( ( $args->has_children ) ? 'dropdown' : '' );
 		$classes[] = ( $item->current || $item->current_item_ancestor ) ? 'active' : '';
+		$classes[] = ( ! $depth ) ? 'nav-item' : '';
 		$classes[] = 'menu-item-' . $item->ID;
 		if ( $depth && $args->has_children ) {
 			$classes[] = 'dropdown-submenu';
@@ -90,22 +93,32 @@ class Nav_Walker extends Walker_Nav_Menu {
 		$attributes .= ! empty( $item->target ) ? ' target="' . esc_attr( $item->target ) . '"' : '';
 		$attributes .= ! empty( $item->xfn ) ? ' rel="' . esc_attr( $item->xfn ) . '"' : '';
 		$attributes .= ! empty( $item->url ) ? ' href="' . esc_attr( $item->url ) . '"' : '';
-		$attributes .= ( $args->has_children ) ? ' class="dropdown-toggle" data-toggle="dropdown"' : '';
+		// Labai svarbu data-bs-auto-close="outside", nes be šito multilevel meniu neveikia – neišsiskleidžia 3 ir didesnio lvl maniu.
+		$attributes .= ( $args->has_children && ! $depth )
+			? ' class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"'
+			: (
+				( $args->has_children && $depth )
+					? 'class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"'
+					: (
+						( ! $args->has_children && ! $depth ) ? 'class="nav-link"' : 'class="dropdown-item"'
+					)
+			);
+
+		// Prideda meniu elemento pavadinimo palaikymą.
+		if ( strlen( $item->attr_title ) > 2 ) {
+			$attributes .= ' title="' . esc_attr( $item->attr_title ) . '"';
+		}
 
 		$item_output  = $args->before;
 		$item_output .= '<a' . $attributes . $aria_current . '>';
 		$item_output .= $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
 
-		// Prideda meniu elemento pavadinimo palaikymą.
-		if ( strlen( $item->attr_title ) > 2 ) {
-			$item_output .= '<h3 class="menu-item-title">' . $item->attr_title . '</h3>';
-		}
+		$item_output .= ( ( 0 === $depth || 1 ) && $args->has_children ) ? ' <span class="caret"></span></a>' : '</a>';
 
 		// Prideda meniu elementų aprašymų palaikymą.
 		if ( strlen( $item->description ) > 2 ) {
-			$item_output .= '</a> <span class="sub">' . $item->description . '</span>';
+			$item_output .= '<span class="description">' . $item->description . '</span>';
 		}
-		$item_output .= ( ( 0 === $depth || 1 ) && $args->has_children ) ? ' <span class="caret"></span></a>' : '</a>';
 		$item_output .= $args->after;
 
 		$output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
