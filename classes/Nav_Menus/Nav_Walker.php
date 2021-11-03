@@ -93,21 +93,22 @@ class Nav_Walker extends Walker_Nav_Menu {
 		$attributes .= ! empty( $item->target ) ? ' target="' . esc_attr( $item->target ) . '"' : '';
 		$attributes .= ! empty( $item->xfn ) ? ' rel="' . esc_attr( $item->xfn ) . '"' : '';
 		$attributes .= ! empty( $item->url ) ? ' href="' . esc_attr( $item->url ) . '"' : '';
-		// Labai svarbu data-bs-auto-close="outside", nes be šito multilevel meniu neveikia – neišsiskleidžia 3 ir didesnio lvl maniu.
+
+		/*
+		 * Labai svarbu data-bs-auto-close="outside",
+		 * nes be šito multilevel meniu neveikia – neišsiskleidžia 3 ir didesnio lvl meniu.
+		 *
+		 * TODO: padaryti atributų priskyrimą labaiu elegantišką.
+		 */
 		$attributes .= ( $args->has_children && ! $depth )
 			? ' class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"'
 			: (
 				( $args->has_children && $depth )
-					? 'class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"'
+					? ' class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"'
 					: (
-						( ! $args->has_children && ! $depth ) ? 'class="nav-link"' : 'class="dropdown-item"'
+						( ! $args->has_children && ! $depth ) ? ' class="nav-link"' : ' class="dropdown-item"'
 					)
 			);
-
-		// Prideda meniu elemento pavadinimo palaikymą.
-		if ( strlen( $item->attr_title ) > 2 ) {
-			$attributes .= ' title="' . esc_attr( $item->attr_title ) . '"';
-		}
 
 		$item_output  = $args->before;
 		$item_output .= '<a' . $attributes . $aria_current . '>';
@@ -117,7 +118,7 @@ class Nav_Walker extends Walker_Nav_Menu {
 
 		// Prideda meniu elementų aprašymų palaikymą.
 		if ( strlen( $item->description ) > 2 ) {
-			$item_output .= '<span class="description">' . $item->description . '</span>';
+			$item_output .= sprintf( '<span class="description">%s</span>', wp_kses_post( $item->description ) );
 		}
 		$item_output .= $args->after;
 
