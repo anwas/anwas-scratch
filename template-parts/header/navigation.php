@@ -19,7 +19,7 @@ if ( ! Anwas_Scratch_Menus::is_primary_nav_menu_active() ) {
 }
 ?>
 
-<nav id="site-navigation" class="main-navigation nav--toggle-sub nav--toggle-small" aria-label="<?php esc_attr_e( 'Main menu', 'anwas-scratch' ); ?>">
+<nav id="site-navigation" class="main-navigation" aria-label="<?php esc_attr_e( 'Main menu', 'anwas-scratch' ); ?>">
 
 	<button class="menu-toggle" aria-label="<?php esc_attr_e( 'Open menu', 'anwas-scratch' ); ?>" aria-controls="primary-menu" aria-expanded="false">
 		<?php esc_html_e( 'Menu', 'anwas-scratch' ); ?>

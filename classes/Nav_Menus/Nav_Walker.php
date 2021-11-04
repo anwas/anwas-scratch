@@ -17,7 +17,6 @@ use \Walker_Nav_Menu;
  * WordPress Walker_Nav_Menu išplėtimo klasė.
  */
 class Nav_Walker extends Walker_Nav_Menu {
-
 	/**
 	 * Sąrašas pradedamas prieš įtraukiant elementus.
 	 *
@@ -30,12 +29,38 @@ class Nav_Walker extends Walker_Nav_Menu {
 	 * @param stdClass $args   „wp_nav_menu()“ argumentų objektas.
 	 */
 	public function start_lvl( &$output, $depth = 0, $args = array() ) {
-		$indent = str_repeat( "\t", $depth );
-		// $submenu      = ( $depth > 0 ) ? ' sub-menu' : '';
-		$submenu      = '';
-		$css_depth    = $depth + 1;
-		$css_menu_lvl = $depth + 2;
-		$output      .= "\n{$indent}<ul class=\"dropdown-menu{$submenu} depth-{$css_depth} menu-lvl-{$css_menu_lvl}\" >\n";
+		if ( isset( $args->item_spacing ) && 'discard' === $args->item_spacing ) {
+			$t = '';
+			$n = '';
+		} else {
+			$t = "\t";
+			$n = "\n";
+		}
+		$indent = str_repeat( $t, $depth );
+
+		// Standartinė WordPress CSS klasė.
+		$classes = array( 'sub-menu' );
+
+		// Bootstrap 5 CSS klasė.
+		$classes[] = 'dropdown-menu';
+
+		// Pasirinktinių CSS klasių valdymas.
+		$css_menu_lvl = $depth + 2;  // Antro lygio „<ul>“ elementas turės CSS klasę „menu-lvl-2“, trečio – „menu-lvl-3“ ir t.t.
+		$classes[]    = 'menu-lvl-' . $css_menu_lvl;
+
+		/**
+		 * Filtruoja meniu sąrašui pritaikytą (-as) CSS klasę (klases).
+		 *
+		 * @since 4.8.0
+		 *
+		 * @param string[] $classes Meniu elementui „<ul>“ pritaikytų CSS klasių masyvas.
+		 * @param stdClass $args    „wp_nav_menu()“ argumentų objektas.
+		 * @param int      $depth   Meniu elemento gylis. Naudojamas atitraukimui (tabuliavimui) ir kt.
+		 */
+		$class_names = implode( ' ', apply_filters( 'nav_menu_submenu_css_class', $classes, $args, $depth ) );
+		$class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
+
+		$output .= "{$n}{$indent}<ul$class_names>{$n}";
 	}
 
 	/**
@@ -48,142 +73,215 @@ class Nav_Walker extends Walker_Nav_Menu {
 	 *
 	 * @param string   $output Naudojamas papildomam turiniui pridėti (perduotas pagal nuorodą (by reference)).
 	 * @param WP_Post  $item   Meniu elemento duomenų objektas.
-	 * @param int      $depth  Meniu elemento gylis. Naudojamas atitraukimui (paddings).
+	 * @param int      $depth  Meniu elemento gylis. Naudojamas atitraukimui (tabuliavimui) ir kt.
 	 * @param stdClass $args   „wp_nav_menu()“ argumentų objektas.
 	 * @param int      $id     Dabartinio elemento ID.
 	 */
-	public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+	public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
 
-		$indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
+		if ( isset( $args->item_spacing ) && 'discard' === $args->item_spacing ) {
+			$t = '';
+			$n = '';
+		} else {
+			$t = "\t";
+			$n = "\n";
+		}
+		$indent = ( $depth ) ? str_repeat( $t, $depth ) : '';
 
-		$li_attributes = '';
-		$class_names   = '';
-		$value         = '';
+		$li_data_attrs = ''; // Jei reikia, galime daabartiniam „<li>“ elementui pridėti reikiamus data atributus.
+		$class_names   = ''; // „<li>“ elemento CSS klasių eilutė (sąrašas).
 
+		/**
+		 * Filtruoja vieno naršymo meniu elemento argumentus.
+		 *
+		 * @since 4.4.0
+		 *
+		 * @param stdClass $args  „wp_nav_menu()“ argumentų objektas.
+		 * @param WP_Post  $item  Meniu elemento duomenų objektas.
+		 * @param int      $depth Meniu elemento gylis. Naudojamas atitraukimui (tabuliavimui) ir kt.
+		 */
+		$args = apply_filters( 'nav_menu_item_args', $args, $item, $depth );
+
+		// „<li>“ elemento CSS klasių masyvas.
 		$classes = empty( $item->classes ) ? array() : (array) $item->classes;
 
-		// Skyriklio (divider) valdymas: prideda skyriklio klasę prie elemento, kad prieš jį būtų gautas skyriklis.
-		// Managing divider: add divider class to an element to get a divider before it.
-		$divider_class_position = array_search( 'divider', $classes, true );
+		/*
+		 * Bootstrap 5 skyriklio (dropdown-divider) valdymas:
+		 *    jei dabartiniam elementui yra priskirt klasė „dropdown-divider“,
+		 *    tai prieš jį pridedamas papildomas „<li>“ elemetas su „<hr>“ žyma.
+		 */
+		$divider_class_position = array_search( 'dropdown-divider', $classes, true );
 		if ( false !== $divider_class_position ) {
-			$output .= "<li class=\"divider\"></li>\n";
-			unset( $classes[ $divider_class_position ] );
+			$output .= $indent . '<li aria-hidden="true"><hr class="dropdown-divider"></li>' . $n; // Bootstrap 5 elementas.
+			unset( $classes[ $divider_class_position ] ); // dabartiniam „<li>“ elementui pašalinama „dropdown-divider“ klasė.
 		}
 
-		// $classes[] = ( $args->has_children ) ? 'dropdown' : '';
-		$classes[] = ( $args->has_children && $depth ) ? 'dropend' : ( ( $args->has_children ) ? 'dropdown' : '' );
-		$classes[] = ( $item->current || $item->current_item_ancestor ) ? 'active' : '';
-		$classes[] = ( ! $depth ) ? 'nav-item' : '';
+		// Standartinė WordPress CSS klasė.
 		$classes[] = 'menu-item-' . $item->ID;
-		if ( $depth && $args->has_children ) {
+
+		// Bootstrap 5 CSS klasės.
+		$classes[] = ( $args->walker->has_children && $depth ) ? 'dropend' : ( ( $args->walker->has_children ) ? 'dropdown' : '' );
+		$classes[] = ( $item->current || $item->current_item_ancestor || $item->current_item_parent ) ? 'active' : '';
+		$classes[] = ( ! $depth ) ? 'nav-item' : '';
+
+		// Pasirinktinių CSS klasių valdymas.
+		if ( $args->walker->has_children && $depth ) {
 			$classes[] = 'dropdown-submenu';
 		}
 
-		$class_names = implode( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args ) );
-		$class_names = ' class="' . esc_attr( $class_names ) . '"';
+		/**
+		 * Filtruoja CSS klases, taikomas meniu sąrašo elementui.
+		 *
+		 * @since 3.0.0
+		 * @since 4.1.0 Buvo pridėtas parametras „$depth“.
+		 *
+		 * @param string[] $classes CSS klasių masyvas, taikomas meniu elementui „<li>“.
+		 * @param WP_Post  $item    Dabartinis meniu elementas.
+		 * @param stdClass $args    „wp_nav_menu()“ argumentų objektas.
+		 * @param int      $depth   Meniu elemento gylis. Naudojamas atitraukimui (tabuliavimui) ir kt.
+		 */
+		$class_names = implode( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args, $depth ) );
+		$class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
 
-		$aria_current = ( $item->current ) ? ' aria-current="page"' : '';
+		/**
+		 * Filtruoja ID, taikomą meniu sąrašo elementui.
+		 *
+		 * @since 3.0.1
+		 * @since 4.1.0 Buvo pridėtas parametras „$depth“.
+		 *
+		 * @param string   $menu_id ID, kuris taikomas meniu elementui „<li>“.
+		 * @param WP_Post  $item    Dabartinis meniu elementas.
+		 * @param stdClass $args    „wp_nav_menu()“ argumentų objektas.
+		 * @param int      $depth   Meniu elemento gylis. Naudojamas atitraukimui (tabuliavimui) ir kt.
+		 */
+		$id = apply_filters( 'nav_menu_item_id', 'menu-item-' . $item->ID, $item, $args, $depth );
+		$id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
 
-		$id = apply_filters( 'nav_menu_item_id', 'menu-item-' . $item->ID, $item, $args );
-		$id = strlen( $id ) ? ' id="' . esc_attr( $id ) . '"' : '';
+		$output .= $indent . '<li' . $id . $class_names . $li_data_attrs . '>';
 
-		$output .= $indent . '<li' . $id . $value . $class_names . $li_attributes . '>';
+		$atts           = array();
+		$atts['title']  = ! empty( $item->attr_title ) ? $item->attr_title : '';
+		$atts['target'] = ! empty( $item->target ) ? $item->target : '';
+		if ( '_blank' === $item->target && empty( $item->xfn ) ) {
+			$atts['rel'] = 'noopener noreferer';
+		} else {
+			$atts['rel'] = $item->xfn;
+		}
+		$atts['href']         = ! empty( $item->url ) ? $item->url : '';
+		$atts['aria-current'] = $item->current ? 'page' : '';
 
-		$attributes  = ! empty( $item->attr_title ) ? ' title="' . esc_attr( $item->attr_title ) . '"' : '';
-		$attributes .= ! empty( $item->target ) ? ' target="' . esc_attr( $item->target ) . '"' : '';
-		$attributes .= ! empty( $item->xfn ) ? ' rel="' . esc_attr( $item->xfn ) . '"' : '';
-		$attributes .= ! empty( $item->url ) ? ' href="' . esc_attr( $item->url ) . '"' : '';
+		/**
+		 * Filtruoja HTML atributus, taikomus meniu elemento nuorodos elementui.
+		 *
+		 * @since 3.6.0
+		 * @since 4.1.0 Buvo pridėtas parametras „$depth“.
+		 *
+		 * @param array $atts {
+		 *     Meniu elemento „<a>“ elementui taikomi HTML atributai, tuščios eilutės yra ignoruojamos.
+		 *
+		 *     @type string $title        „title“ atributas.
+		 *     @type string $target       „target“ atributas.
+		 *     @type string $rel          „rel“ atributas.
+		 *     @type string $href         „href“ atributas.
+		 *     @type string $aria-current „aria-current“ atributas.
+		 * }
+		 * @param WP_Post  $item  Dabartinis meniu elementas.
+		 * @param stdClass $args  „wp_nav_menu()“ argumentų objektas.
+		 * @param int      $depth Meniu elemento gylis. Naudojamas atitraukimui (tabuliavimui) ir kt.
+		 */
+		$atts = apply_filters( 'nav_menu_link_attributes', $atts, $item, $args, $depth );
+
+		$attributes = '';
+		foreach ( $atts as $attr => $value ) {
+			if ( is_scalar( $value ) && '' !== $value && false !== $value ) {
+				$value       = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
+				$attributes .= ' ' . $attr . '="' . $value . '"';
+			}
+		}
+
+		/** Šis filtras dokumentuotas wp-includes/post-template.php faile. */
+		$title = apply_filters( 'the_title', $item->title, $item->ID );
+
+		/**
+		 * Filtruoja meniu elemento pavadinimą.
+		 *
+		 * @since 4.4.0
+		 *
+		 * @param string   $title Meniu elemento pavadinimas.
+		 * @param WP_Post  $item  Dabartinis meniu elementas.
+		 * @param stdClass $args  „wp_nav_menu()“ argumentų objektas.
+		 * @param int      $depth Meniu elemento gylis. Naudojamas atitraukimui (tabuliavimui) ir kt.
+		 */
+		$title = apply_filters( 'nav_menu_item_title', $title, $item, $args, $depth );
 
 		/*
-		 * Labai svarbu data-bs-auto-close="outside",
-		 * nes be šito multilevel meniu neveikia – neišsiskleidžia 3 ir didesnio lvl meniu.
+		 * Labai svarbu: „data-bs-auto-close="outside"“,
+		 * nes be šito Bootstrap 5 multilevel meniu neveikia – neišsiskleidžia 3 ir didesnio lvl meniu.
 		 *
-		 * TODO: padaryti atributų priskyrimą labaiu elegantišką.
+		 * Bootstrap 5 nuorodų („<a>“) CSS klasės: „nav-link“, „dropdown-item“, „dropdown-toggle“.
 		 */
-		$attributes .= ( $args->has_children && ! $depth )
-			? ' class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"'
-			: (
-				( $args->has_children && $depth )
-					? ' class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"'
-					: (
-						( ! $args->has_children && ! $depth ) ? ' class="nav-link"' : ' class="dropdown-item"'
-					)
-			);
+		$link_classes  = array();
+		$link_atts     = array(); // galima naudoti bet kokiems atributams: data-, aria-, role ar pan.
+		$link_atts_str = '';
+
+		if ( isset( $item->object_id ) && get_option( 'page_on_front' ) === $item->object_id ) {
+			$link_classes[] = ( $depth ) ? 'dropdown-item--front-page' : 'nav-link--front-page';
+		}
+
+		if ( isset( $item->object_id ) && get_option( 'page_for_posts' ) === $item->object_id ) {
+			$link_classes[] = ( $depth ) ? 'dropdown-item--blog-page' : 'nav-link--blog-page';
+		}
+
+		if ( $item->current || $item->current_item_ancestor || $item->current_item_parent ) {
+			$link_classes[] = ( $depth ) ? 'dropdown-item--active' : 'nav-link--active';
+		}
+
+		$link_classes[] = ( $depth ) ? 'dropdown-item' : 'nav-link';
+
+		if ( $args->walker->has_children ) {
+			$link_classes[]              = 'dropdown-toggle';
+			$link_atts['data-bs-toggle'] = 'dropdown';
+			$link_atts['data-bs-auto']   = 'outside';
+			$link_atts['role']           = 'button';
+			$link_atts['aria-expanded']  = 'false';
+		}
+
+		// Suformuojama nuorodos „<a>“ CSS klasių eilutė.
+		$link_classes_names = implode( ' ', array_filter( $link_classes ) );
+		$link_classes_names = $link_classes_names ? ' class="' . esc_attr( $link_classes_names ) . '"' : '';
+
+		// Suformuojama nuorodos „<a>“ data atributų eilutė.
+		if ( ! empty( $link_atts ) ) {
+			foreach ( $link_atts as $data_att_key => $data_att_value ) {
+				$link_atts_str .= ' ' . esc_attr( $data_att_key ) . '="' . esc_attr( $data_att_value ) . '"';
+			}
+		}
 
 		$item_output  = $args->before;
-		$item_output .= '<a' . $attributes . $aria_current . '>';
-		$item_output .= $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
-
-		$item_output .= ( ( 0 === $depth || 1 ) && $args->has_children ) ? ' <span class="caret"></span></a>' : '</a>';
-
-		// Prideda meniu elementų aprašymų palaikymą.
-		if ( strlen( $item->description ) > 2 ) {
-			$item_output .= sprintf( '<span class="description">%s</span>', wp_kses_post( $item->description ) );
+		$item_output .= '<a' . $attributes . $link_classes_names . $link_atts_str . '>';
+		$item_output .= $args->link_before . $title . $args->link_after;
+		$item_output .= ( ( 0 === $depth || 1 ) && $args->walker->has_children ) ? ' <span class="caret"></span>' : '';
+		$item_output .= '</a>';
+		// Prideda meniu elemento aprašymo eilutė, jei ji ne tuščia.
+		if ( ! empty( $item->description ) ) {
+			$item_output .= sprintf( '<span class="nav-item--description">%s</span>', wp_kses_post( $item->description ) );
 		}
 		$item_output .= $args->after;
 
+		/**
+		 * Filtruoja meniu elemento pradžios išvestį.
+		 *
+		 * Meniu elemento pradžios išvestį sudaro tik „$args->before“, pradžios „<a>“,
+		 * meniu elemento pavadinimas, uždarymo „</a>“ ir „$args->after“.
+		 * Šiuo metu nėra filtro, skirto keisti meniu elemento atidarymo ir uždarymo „<li>“.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param string   $item_output Meniu elemento HTML išvesties pradžia.
+		 * @param WP_Post  $item        Meniu elemento duomenų objektas.
+		 * @param int      $depth       Meniu elemento gylis. Naudojamas atitraukimui (tabuliavimui) ir kt.
+		 * @param stdClass $args        „wp_nav_menu()“ argumentų objektas.
+		 */
 		$output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
-	}
-
-	/**
-	 * Perrenka (traverce) elementus, kad sudarytų sąrašą iš elementų.
-	 *
-	 * Rodo vieną elementą, jei elementas neturi vaikų“, kitu atveju rodo elementą ir jo vaikus.
-	 * Perrinks tik iki didžiausio gylio ir nepaisys elementų žemiau šio gylio.
-	 * Galima nustatyti maksimalų gylį, kad būtų įtraukti visi gyliai, žr. walk() metodą.
-	 *
-	 * Šio metodo nereikėtų iškviesti tiesiogiai, vietoj jo naudokite metodą walk().
-	 *
-	 * @since 2.5.0
-	 *
-	 * @param object $element           Duomenų objektas.
-	 * @param array  $children_elements Elementų sąrašas, kuriuos reikia tęsti perrinti (perduodamas pagal nuorodą (by reference)).
-	 * @param int    $max_depth         maksimalus perrinkimo gylis.
-	 * @param int    $depth             Esamo elemento gylis.
-	 * @param array  $args              Argumentų masyvas.
-	 * @param string $output            Naudojamas papildomam turiniui pridėti (perduotas pagal nuorodą (by reference)).
-	 */
-	public function display_element( $element, &$children_elements, $max_depth, $depth, $args, &$output ) {
-		if ( ! $element ) {
-			return;
-		}
-
-		$id_field = $this->db_fields['id'];
-
-		// Rodyti šį elementą.
-		if ( is_array( $args[0] ) ) {
-			$args[0]['has_children'] = ! empty( $children_elements[ $element->$id_field ] );
-		} elseif ( is_object( $args[0] ) ) {
-			$args[0]->has_children = ! empty( $children_elements[ $element->$id_field ] );
-		}
-
-		$cb_args = array_merge( array( &$output, $element, $depth ), $args );
-		call_user_func_array( array( $this, 'start_el' ), $cb_args );
-
-		$id = $element->$id_field;
-
-		// Eiti gilyn tik tada, kai gylis tinkamas ir yra vaikų šiam elementui.
-		if ( ( 0 === $max_depth || $max_depth > $depth + 1 ) && isset( $children_elements[ $id ] ) ) {
-			foreach ( $children_elements[ $id ] as $child ) {
-				if ( ! isset( $newlevel ) ) {
-					$newlevel = true;
-					// Pradėti vaiko skyriklį.
-					$cb_args = array_merge( array( &$output, $depth ), $args );
-					call_user_func_array( array( $this, 'start_lvl' ), $cb_args );
-				}
-				$this->display_element( $child, $children_elements, $max_depth, $depth + 1, $args, $output );
-			}
-			unset( $children_elements[ $id ] );
-		}
-
-		if ( isset( $newlevel ) && $newlevel ) {
-			// Baigti vaiko skyriklį.
-			$cb_args = array_merge( array( &$output, $depth ), $args );
-			call_user_func_array( array( $this, 'end_lvl' ), $cb_args );
-		}
-
-		// Baigti šį elmentą.
-		$cb_args = array_merge( array( &$output, $element, $depth ), $args );
-		call_user_func_array( array( $this, 'end_el' ), $cb_args );
 	}
 }
