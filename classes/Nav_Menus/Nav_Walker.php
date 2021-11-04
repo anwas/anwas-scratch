@@ -88,8 +88,9 @@ class Nav_Walker extends Walker_Nav_Menu {
 		}
 		$indent = ( $depth ) ? str_repeat( $t, $depth ) : '';
 
-		$li_data_attrs = ''; // Jei reikia, galime daabartiniam „<li>“ elementui pridėti reikiamus data atributus.
-		$class_names   = ''; // „<li>“ elemento CSS klasių eilutė (sąrašas).
+		$class_names = ''; // „<li>“ elemento CSS klasių eilutė (sąrašas).
+		$li_atts     = array(); // Jei reikia, galima dabartiniam „<li>“ elementui pridėti reikiamus data atributus.
+		$li_atts_str = '';
 
 		/**
 		 * Filtruoja vieno naršymo meniu elemento argumentus.
@@ -121,12 +122,26 @@ class Nav_Walker extends Walker_Nav_Menu {
 
 		// Bootstrap 5 CSS klasės.
 		$classes[] = ( $args->walker->has_children && $depth ) ? 'dropend' : ( ( $args->walker->has_children ) ? 'dropdown' : '' );
-		$classes[] = ( $item->current || $item->current_item_ancestor || $item->current_item_parent ) ? 'active' : '';
+		if ( $item->current || $item->current_item_ancestor || $item->current_item_parent ) {
+			$classes[] = 'active';
+			$classes[] = 'nav-item--active';
+		}
+
 		$classes[] = ( ! $depth ) ? 'nav-item' : '';
 
 		// Pasirinktinių CSS klasių valdymas.
 		if ( $args->walker->has_children && $depth ) {
 			$classes[] = 'dropdown-submenu';
+		}
+
+		if ( isset( $item->object_id ) && 'page' === get_option( 'show_on_front' ) ) {
+			if ( get_option( 'page_on_front' ) === $item->object_id ) {
+				$classes[] = ( $depth ) ? 'dropdown-item--front-page' : 'nav-item--front-page';
+			}
+
+			if ( get_option( 'page_for_posts' ) === $item->object_id ) {
+				$classes[] = ( $depth ) ? 'dropdown-item--blog-page' : 'nav-item--blog-page';
+			}
 		}
 
 		/**
@@ -157,7 +172,14 @@ class Nav_Walker extends Walker_Nav_Menu {
 		$id = apply_filters( 'nav_menu_item_id', 'menu-item-' . $item->ID, $item, $args, $depth );
 		$id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
 
-		$output .= $indent . '<li' . $id . $class_names . $li_data_attrs . '>';
+		// Suformuojama „<li>“ elemento pasirinktinių atributų eilutė.
+		foreach ( $li_atts as $attr_key => $attr_value ) {
+			if ( is_scalar( $attr_key ) && is_scalar( $attr_value ) && '' !== $attr_value && false !== $attr_value ) {
+				$li_atts_str .= ' ' . sanitize_key( $attr_key ) . '="' . esc_attr( $attr_value ) . '"';
+			}
+		}
+
+		$output .= $indent . '<li' . $id . $class_names . $li_atts_str . '>';
 
 		$atts           = array();
 		$atts['title']  = ! empty( $item->attr_title ) ? $item->attr_title : '';
@@ -170,8 +192,17 @@ class Nav_Walker extends Walker_Nav_Menu {
 		$atts['href']         = ! empty( $item->url ) ? $item->url : '';
 		$atts['aria-current'] = $item->current ? 'page' : '';
 
+		if ( $args->walker->has_children ) {
+			$atts['data-bs-toggle'] = 'dropdown';
+			$atts['data-bs-auto']   = 'outside';
+			$atts['role']           = 'button';
+			$atts['aria-expanded']  = 'false';
+		}
+
 		/**
 		 * Filtruoja HTML atributus, taikomus meniu elemento nuorodos elementui.
+		 *
+		 * Pavyzdžiai, kaip naudoti filtrą čia: https://developer.wordpress.org/reference/hooks/nav_menu_link_attributes/ .
 		 *
 		 * @since 3.6.0
 		 * @since 4.1.0 Buvo pridėtas parametras „$depth“.
@@ -193,9 +224,9 @@ class Nav_Walker extends Walker_Nav_Menu {
 
 		$attributes = '';
 		foreach ( $atts as $attr => $value ) {
-			if ( is_scalar( $value ) && '' !== $value && false !== $value ) {
+			if ( is_scalar( $attr ) && is_scalar( $value ) && '' !== $value && false !== $value ) {
 				$value       = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
-				$attributes .= ' ' . $attr . '="' . $value . '"';
+				$attributes .= ' ' . sanitize_key( $attr ) . '="' . $value . '"';
 			}
 		}
 
@@ -220,45 +251,35 @@ class Nav_Walker extends Walker_Nav_Menu {
 		 *
 		 * Bootstrap 5 nuorodų („<a>“) CSS klasės: „nav-link“, „dropdown-item“, „dropdown-toggle“.
 		 */
-		$link_classes  = array();
-		$link_atts     = array(); // galima naudoti bet kokiems atributams: data-, aria-, role ar pan.
-		$link_atts_str = '';
+		$link_classes = array();
 
-		if ( isset( $item->object_id ) && get_option( 'page_on_front' ) === $item->object_id ) {
-			$link_classes[] = ( $depth ) ? 'dropdown-item--front-page' : 'nav-link--front-page';
-		}
-
-		if ( isset( $item->object_id ) && get_option( 'page_for_posts' ) === $item->object_id ) {
-			$link_classes[] = ( $depth ) ? 'dropdown-item--blog-page' : 'nav-link--blog-page';
-		}
-
-		if ( $item->current || $item->current_item_ancestor || $item->current_item_parent ) {
-			$link_classes[] = ( $depth ) ? 'dropdown-item--active' : 'nav-link--active';
+		if ( $args->walker->has_children ) {
+			$link_classes[] = 'dropdown-toggle';
 		}
 
 		$link_classes[] = ( $depth ) ? 'dropdown-item' : 'nav-link';
 
-		if ( $args->walker->has_children ) {
-			$link_classes[]              = 'dropdown-toggle';
-			$link_atts['data-bs-toggle'] = 'dropdown';
-			$link_atts['data-bs-auto']   = 'outside';
-			$link_atts['role']           = 'button';
-			$link_atts['aria-expanded']  = 'false';
+		if ( isset( $item->object_id ) && 'page' === get_option( 'show_on_front' ) ) {
+			if ( get_option( 'page_on_front' ) === $item->object_id ) {
+				$link_classes[] = ( $depth ) ? 'dropdown-item--front-page' : 'nav-link--front-page';
+			}
+
+			if ( get_option( 'page_for_posts' ) === $item->object_id ) {
+				$link_classes[] = ( $depth ) ? 'dropdown-item--blog-page' : 'nav-link--blog-page';
+			}
+		}
+
+		if ( $item->current || $item->current_item_ancestor || $item->current_item_parent ) {
+			$link_classes[] = ( $depth ) ? 'dropdown-item--active' : 'nav-link--active';
+			$link_classes[] = 'active';
 		}
 
 		// Suformuojama nuorodos „<a>“ CSS klasių eilutė.
 		$link_classes_names = implode( ' ', array_filter( $link_classes ) );
 		$link_classes_names = $link_classes_names ? ' class="' . esc_attr( $link_classes_names ) . '"' : '';
 
-		// Suformuojama nuorodos „<a>“ data atributų eilutė.
-		if ( ! empty( $link_atts ) ) {
-			foreach ( $link_atts as $data_att_key => $data_att_value ) {
-				$link_atts_str .= ' ' . esc_attr( $data_att_key ) . '="' . esc_attr( $data_att_value ) . '"';
-			}
-		}
-
 		$item_output  = $args->before;
-		$item_output .= '<a' . $attributes . $link_classes_names . $link_atts_str . '>';
+		$item_output .= '<a' . $attributes . $link_classes_names . '>';
 		$item_output .= $args->link_before . $title . $args->link_after;
 		$item_output .= ( ( 0 === $depth || 1 ) && $args->walker->has_children ) ? ' <span class="caret"></span>' : '';
 		$item_output .= '</a>';
