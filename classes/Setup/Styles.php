@@ -79,10 +79,6 @@ class Styles {
 		}
 
 		$css_files = array(
-			'anwas-scratch-reset'      => array(
-				'file'   => '/assets/css/reset.css',
-				'global' => true,
-			),
 			'anwas-scratch-global'     => array(
 				'file'   => '/assets/css/global.css',
 				'global' => true,
