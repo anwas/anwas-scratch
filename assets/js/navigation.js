@@ -3,11 +3,7 @@ var __webpack_exports__ = {};
 /*!*****************************************************************************!*\
   !*** ../sites/wp/web/wp-content/themes/anwas-scratch/_src/js/navigation.js ***!
   \*****************************************************************************/
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+/* global anwas_scratch_screen_reader_text */
 
 /**
  * File navigation.js.
@@ -15,128 +11,206 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
  * Handles toggling the navigation menu for small screens and enables TAB key
  * navigation support for dropdown menus.
  */
-(function () {
-  var siteNavigation = document.getElementById('site-navigation'); // Return early if the navigation don't exist.
+var KEYMAP = {
+  TAB: 9,
+  ESC: 27
+};
 
-  if (!siteNavigation) {
+if ('loading' === document.readyState) {
+  // The DOM has not yet been loaded.
+  document.addEventListener('DOMContentLoaded', initNavigation);
+} else {
+  // The DOM has already been loaded.
+  initNavigation();
+} // Initiate the menus when the DOM loads.
+
+
+function initNavigation() {
+  initNavToggleSubmenus();
+  var BODY_EL = document.querySelector('html > body');
+  BODY_EL.addEventListener('keydown', function (e) {
+    if (KEYMAP.ESC === e.keyCode) {
+      console.log('ESC');
+      actionCloseAllMenus();
+    }
+  }, false);
+  BODY_EL.addEventListener('click', function (e) {
+    console.log('BODY click');
+    actionCloseAllMenus();
+  }, false);
+}
+/**
+ * Initiate the script to process all
+ * navigation menus with submenu toggle enabled.
+ */
+
+
+function initNavToggleSubmenus() {
+  var NAV_TOGGLE = document.querySelectorAll('.main-navigation'); // No point if no navs.
+
+  if (!NAV_TOGGLE.length) {
     return;
   }
 
-  var button = siteNavigation.getElementsByTagName('button')[0]; // Return early if the button don't exist.
+  for (var i = 0; i < NAV_TOGGLE.length; i++) {
+    initMenuToggleButton(NAV_TOGGLE[i]);
+    initEachDropdown(NAV_TOGGLE[i]);
+  }
+}
 
-  if ('undefined' === typeof button) {
+function initMenuToggleButton(nav) {
+  // Mobilaus meniu perjungimo mygtukas.
+  var MENU_TOOGLE = nav.querySelector('.menu-toggle'); // Jei nėra meniu perjungimo mygtuko, nėra prasmės tęsti.
+
+  if (!MENU_TOOGLE) {
     return;
   }
 
-  var menu = siteNavigation.getElementsByTagName('ul')[0]; // Hide menu toggle button if menu is empty and return early.
+  var MENU_CONTAINER = nav.querySelector('.primary-menu-container'); // Jei nėra meniu konteinerio, nėra prasmės tęsti.
 
-  if ('undefined' === typeof menu) {
-    button.style.display = 'none';
+  if (!MENU_CONTAINER) {
     return;
   }
 
-  if (!menu.classList.contains('nav-menu')) {
-    menu.classList.add('nav-menu');
-  } // Toggle the .toggled class and the aria-expanded value each time the button is clicked.
+  MENU_TOOGLE.addEventListener('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-
-  button.addEventListener('click', function () {
-    siteNavigation.classList.toggle('toggled');
-
-    if (button.getAttribute('aria-expanded') === 'true') {
-      button.setAttribute('aria-expanded', 'false');
+    if (MENU_CONTAINER.classList.contains('toggled')) {
+      MENU_CONTAINER.classList.remove('toggled');
+      MENU_TOOGLE.setAttribute('aria-label', anwas_scratch_screen_reader_text.expand_menu);
+      MENU_TOOGLE.setAttribute('aria-expanded', 'false');
     } else {
-      button.setAttribute('aria-expanded', 'true');
+      MENU_CONTAINER.classList.add('toggled');
+      MENU_TOOGLE.setAttribute('aria-label', anwas_scratch_screen_reader_text.collapse_menu);
+      MENU_TOOGLE.setAttribute('aria-expanded', 'true');
     }
-  }); // Remove the .toggled class and set aria-expanded to false when the user clicks outside the navigation.
+  }, false);
+}
 
-  document.addEventListener('click', function (event) {
-    var isClickInside = siteNavigation.contains(event.target);
+function initEachDropdown(nav) {
+  var DROPDOWNS = nav.querySelectorAll('.menu-item-has-children', '.page_item_has_children'); // li elementas su menu-item-has-children arba .page_item_has_children CSS klase.
+  // Jei nėra išskleidžiamų meniu, nėra prasmės tęsti.
 
-    if (!isClickInside) {
-      siteNavigation.classList.remove('toggled');
-      button.setAttribute('aria-expanded', 'false');
-    }
-  }); // Get all the link elements within the menu.
-
-  var links = menu.getElementsByTagName('a'); // Get all the link elements with children within the menu.
-
-  var linksWithChildren = menu.querySelectorAll('.menu-item-has-children > a, .page_item_has_children > a'); // Toggle focus each time a menu link is focused or blurred.
-
-  var _iterator = _createForOfIteratorHelper(links),
-      _step;
-
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var link = _step.value;
-      link.addEventListener('focus', toggleFocus, true);
-      link.addEventListener('blur', toggleFocus, true);
-    } // Toggle focus each time a menu link with children receive a touch event.
-
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
+  if (!DROPDOWNS.length) {
+    return;
   }
 
-  var _iterator2 = _createForOfIteratorHelper(linksWithChildren),
-      _step2;
+  var _loop = function _loop(i) {
+    // Elementas su .dropdown-toggle CSS klase, kuris išskleidžia submeniu (įprastai tai <a> elementas bet gali būti ir <button> ar pan.).
+    var DROPDOWN_TOGGLE = DROPDOWNS[i].querySelector('.dropdown-toggle');
 
-  try {
-    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-      var _link = _step2.value;
-
-      _link.addEventListener('touchstart', toggleFocus, false);
+    if (!DROPDOWN_TOGGLE) {
+      return "continue";
     }
-    /**
-     * Sets or removes .focus class on an element.
-     */
 
-  } catch (err) {
-    _iterator2.e(err);
-  } finally {
-    _iterator2.f();
+    DROPDOWN_TOGGLE.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var DROPDOWN_TOGGLE_PARENT = DROPDOWN_TOGGLE.parentNode;
+      toggleSubMenu(DROPDOWN_TOGGLE_PARENT);
+    }, false);
+  };
+
+  for (var i = 0; i < DROPDOWNS.length; i++) {
+    var _ret = _loop(i);
+
+    if (_ret === "continue") continue;
+  }
+}
+/**
+ * Toggle submenus open and closed, and tell screen readers what's going on.
+ * @param {Object} parentMenuItem Parent menu element.
+ * @param {boolean} forceToggle Force the menu toggle.
+ * @return {void}
+ */
+
+
+function toggleSubMenu(parentMenuItem, forceToggle) {
+  var TOGGLE_BUTTON = parentMenuItem.querySelector('.dropdown-toggle');
+
+  if (!TOGGLE_BUTTON) {
+    return;
   }
 
-  function toggleFocus(event) {
-    if (event.type === 'focus' || event.type === 'blur') {
-      var self = this; // Move up through the ancestors of the current link until we hit .nav-menu.
+  var SUB_MENU = parentMenuItem.querySelector('ul');
+  var parentMenuItemToggled = parentMenuItem.classList.contains('menu-item--toggled-on'); // Will be true if we want to force the toggle on, false if force toggle close.
 
-      while (!self.classList.contains('nav-menu')) {
-        // On li elements toggle the class .focus.
-        if ('li' === self.tagName.toLowerCase()) {
-          self.classList.toggle('focus');
-        }
+  if (undefined !== forceToggle && 'boolean' === typeof forceToggle) {
+    parentMenuItemToggled = !forceToggle;
+  } // Toggle aria-expanded status.
 
-        self = self.parentNode;
-      }
+
+  TOGGLE_BUTTON.setAttribute('aria-expanded', (!parentMenuItemToggled).toString());
+  /*
+   * Steps to handle during toggle:
+   * - Let the parent menu item know we're toggled on/off.
+   * - Toggle the ARIA label to let screen readers know will expand or collapse.
+   */
+
+  if (parentMenuItemToggled) {
+    // Toggle "off" the submenu.
+    parentMenuItem.classList.remove('menu-item--toggled-on');
+    SUB_MENU.classList.remove('toggle-show');
+    TOGGLE_BUTTON.setAttribute('aria-label', anwas_scratch_screen_reader_text.expand); // Make sure all children are closed.
+
+    var SUB_MENU_ITEMS_TOGGLED = parentMenuItem.querySelectorAll('.menu-item--toggled-on');
+
+    for (var i = 0; i < SUB_MENU_ITEMS_TOGGLED.length; i++) {
+      toggleSubMenu(SUB_MENU_ITEMS_TOGGLED[i], false);
     }
+  } else {
+    // Make sure siblings are closed.
+    var PARENT_MENU_ITEMS_TOGGLED = parentMenuItem.parentNode.querySelectorAll('li.menu-item--toggled-on');
 
-    if (event.type === 'touchstart') {
-      var menuItem = this.parentNode;
-      event.preventDefault();
+    for (var _i = 0; _i < PARENT_MENU_ITEMS_TOGGLED.length; _i++) {
+      toggleSubMenu(PARENT_MENU_ITEMS_TOGGLED[_i], false);
+    } // Toggle "on" the submenu.
 
-      var _iterator3 = _createForOfIteratorHelper(menuItem.parentNode.children),
-          _step3;
 
-      try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var link = _step3.value;
-
-          if (menuItem !== link) {
-            link.classList.remove('focus');
-          }
-        }
-      } catch (err) {
-        _iterator3.e(err);
-      } finally {
-        _iterator3.f();
-      }
-
-      menuItem.classList.toggle('focus');
-    }
+    parentMenuItem.classList.add('menu-item--toggled-on');
+    SUB_MENU.classList.add('toggle-show');
+    TOGGLE_BUTTON.setAttribute('aria-label', anwas_scratch_screen_reader_text.collapse);
   }
-})();
+}
+
+function actionCloseAllMenus() {
+  var NAV = document.querySelector('nav.main-navigation'); // No point if no nav menu.
+
+  if (!NAV) {
+    return;
+  }
+
+  var MENU_CONTAINER = NAV.querySelector('.primary-menu-container'); // Jei nėra meniu konteinerio, nėra prasmės tęsti.
+
+  if (!MENU_CONTAINER) {
+    return;
+  } // Mobilaus meniu perjungimo mygtukas.
+
+
+  var MENU_TOOGLE = NAV.querySelector('.menu-toggle'); // Jei nėra meniu perjungimo mygtuko, nėra prasmės tęsti.
+
+  if (!MENU_TOOGLE) {
+    return;
+  }
+
+  if (MENU_CONTAINER.classList.contains('toggled')) {
+    MENU_CONTAINER.classList.remove('toggled');
+    MENU_TOOGLE.setAttribute('aria-label', anwas_scratch_screen_reader_text.expand_menu);
+    MENU_TOOGLE.setAttribute('aria-expanded', 'false');
+  }
+
+  MENU_TOOGLE.focus();
+  var PARENT_MENU_ITEMS_TOGGLED = NAV.querySelectorAll('.menu li.menu-item--toggled-on');
+
+  if (!PARENT_MENU_ITEMS_TOGGLED.length) {
+    return;
+  }
+
+  for (var i = 0; i < PARENT_MENU_ITEMS_TOGGLED.length; i++) {
+    toggleSubMenu(PARENT_MENU_ITEMS_TOGGLED[i], false);
+  }
+}
 /******/ })()
 ;
 //# sourceMappingURL=navigation.js.map
