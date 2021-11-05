@@ -73,18 +73,20 @@ class Scripts {
 				'enqueue_callback' => function() {
 					return is_front_page();
 				},
-				'localize'         => array(
-					'obj_str' => 'anwas_scratch_main_object',
-					'data'    => array(
-						'expand'   => __( 'Expand child menu', 'anwas-scratch' ),
-						'collapse' => __( 'Collapse child menu', 'anwas-scratch' ),
-					),
-				),
 			),
-			'anwas-bavigation' => array(
+			'anwas-navigation' => array(
 				'file'        => '/assets/js/navigation.js',
 				'in_footer'   => false,
 				'defer'       => true,
+				'localize'    => array(
+					'obj_str' => 'anwas_scratch_screen_reader_text',
+					'data'    => array(
+						'expand'        => __( 'Expand child menu', 'anwas-scratch' ),
+						'collapse'      => __( 'Collapse child menu', 'anwas-scratch' ),
+						'expand_menu'   => __( 'Open menu', 'anwas-scratch' ),
+						'collapse_menu' => __( 'Collapse menu', 'anwas-scratch' ),
+					),
+				),
 			),
 		);
 
