@@ -38,6 +38,12 @@ Jei norite pakeisti temos versijos numerį visuose failuose pavyzdžiui iš 1.0.
 find ./ -type f -exec sed -i 's/1.0.0/1.1.0/g' {} \;
 ```
 
+Ankstesnė komanda pakeis visas versijas ir tose eilutėse, kurios turi tekstą „**@since 1.0.0**“, o tai nėra logiška. Todėl, norint pakeitimo metu praleisti visas eilutes, kurios turi žodį „**@since**“, galima naudoti sekančią komandą vietoj aukščiau esančios:
+
+```
+find ./ -type f -exec sed -i -E '/(@since)/!s/1.0.0/1.1.0/g' {} \;
+```
+
 Dar gali reikti pakeisti failų ir aplankų pavadinimus (visuose pavadinimuose teksto dalį „anwas-scratch“ pakeisti į „nauja-tema“) – komanda įvedama vis dar būnant komandinėje eilutėje temos aplanke:
 
 ```
