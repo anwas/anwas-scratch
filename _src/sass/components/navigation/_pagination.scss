@@ -1,0 +1,104 @@
+.navigation {
+	width: 100%;
+	@include clearfix-full();
+
+	.page-numbers,
+	.post-page-numbers {
+		display: inline-block;
+		padding: 0.5rem 0.75rem;
+
+		background-color: $color__gray-700;
+		color: $color__gray-100;
+
+		text-decoration: none;
+		line-height: 1;
+
+		border: 1px solid $color__gray-700;
+
+		&:focus,
+		&:hover {
+			background-color: darken($color__gray-700, 12%);
+		}
+
+		&.current {
+			background-color: $color__gray-100;
+			color: $color__dark;
+			font-weight: 700;
+			box-shadow: inset 0px 0px 2px 1px rgba(0,0,0,0.35);
+		}
+	}
+
+	a {
+		cursor: pointer;
+
+		&:focus,
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	.nav-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+
+		line-height: 1;
+		margin: 2rem auto;
+
+		align-items: center;
+		justify-content: center;
+
+		// Įrašo ar puslapio turinio puslapiavimas.
+		&.post-nav-links {
+			justify-content: left;
+			gap: 0.25rem;
+
+			.post-nav-links__title {
+				font-weight: 700;
+			}
+
+			.post-page-numbers {
+				padding: 0.25rem 0.5rem;
+
+				&.current {
+					box-shadow: inset 0px 0px 2px 1px rgba(0,0,0,0.35);
+				}
+			}
+		}
+	}
+
+	// Navigacija iš įrašo į įrašą (įrašo viduje).
+	&.post-navigation {
+		border-top: 2px solid $color__dark;
+		border-bottom: 2px solid $color__dark;
+		margin-top: 2rem;
+		margin-bottom: 2rem;
+
+		.nav-links {
+			margin-top: 1rem;
+			margin-bottom: 1rem;
+			justify-content: space-between;
+		}
+
+		a {
+			text-decoration: none;
+			color: $color__gray-700;
+			font-weight: 700;
+
+			&:focus,
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+
+		.nav-links__sub {
+			font-weight: 400;
+		}
+
+		.nav-previous {
+			.nav-links__sub {
+				text-align: right;
+			}
+		}
+	}
+} // END .navigation

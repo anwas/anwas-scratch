@@ -734,6 +734,93 @@ textarea {
   }
 }
 
+.navigation {
+  width: 100%;
+}
+.navigation::before, .navigation::after {
+  content: "";
+  display: table;
+  table-layout: fixed;
+}
+.navigation::after {
+  clear: both;
+}
+.navigation .page-numbers,
+.navigation .post-page-numbers {
+  display: inline-block;
+  padding: 0.5rem 0.75rem;
+  background-color: #505050;
+  color: #f0f0f0;
+  text-decoration: none;
+  line-height: 1;
+  border: 1px solid #505050;
+}
+.navigation .page-numbers:focus, .navigation .page-numbers:hover,
+.navigation .post-page-numbers:focus,
+.navigation .post-page-numbers:hover {
+  background-color: #313131;
+}
+.navigation .page-numbers.current,
+.navigation .post-page-numbers.current {
+  background-color: #f0f0f0;
+  color: #3e3e3e;
+  font-weight: 700;
+  box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.35);
+}
+.navigation a {
+  cursor: pointer;
+}
+.navigation a:focus, .navigation a:hover {
+  text-decoration: underline;
+}
+.navigation .nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  line-height: 1;
+  margin: 2rem auto;
+  align-items: center;
+  justify-content: center;
+}
+.navigation .nav-links.post-nav-links {
+  justify-content: left;
+  gap: 0.25rem;
+}
+.navigation .nav-links.post-nav-links .post-nav-links__title {
+  font-weight: 700;
+}
+.navigation .nav-links.post-nav-links .post-page-numbers {
+  padding: 0.25rem 0.5rem;
+}
+.navigation .nav-links.post-nav-links .post-page-numbers.current {
+  box-shadow: inset 0px 0px 2px 1px rgba(0, 0, 0, 0.35);
+}
+.navigation.post-navigation {
+  border-top: 2px solid #3e3e3e;
+  border-bottom: 2px solid #3e3e3e;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.navigation.post-navigation .nav-links {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+.navigation.post-navigation a {
+  text-decoration: none;
+  color: #505050;
+  font-weight: 700;
+}
+.navigation.post-navigation a:focus, .navigation.post-navigation a:hover {
+  text-decoration: underline;
+}
+.navigation.post-navigation .nav-links__sub {
+  font-weight: 400;
+}
+.navigation.post-navigation .nav-previous .nav-links__sub {
+  text-align: right;
+}
+
 /* Posts and pages
 --------------------------------------------- */
 .sticky {
@@ -743,6 +830,18 @@ textarea {
 .post,
 .page {
   margin: 0 0 1.5em;
+}
+
+.entry__content::before, .entry__content::after,
+.entry__footer::before,
+.entry__footer::after {
+  content: "";
+  display: table;
+  table-layout: fixed;
+}
+.entry__content::after,
+.entry__footer::after {
+  clear: both;
 }
 
 .updated:not(.published) {

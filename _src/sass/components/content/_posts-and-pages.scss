@@ -7,6 +7,13 @@
 	margin: 0 0 1.5em;
 }
 
+// TODO: išsiaiškinti ar šita taisyklė nesugadina full-width ir wide taisyklių veikimo.
+// Čia to reikia, tam atvejui, kai įraše yra plaukiojantis (float) elementas, kuris aukštesnis už viso įrašo aukštį.
+.entry__content, // be šito entry__footer būna šalia viso teksto, o ne po plaukiojančiu elementu.
+.entry__footer {
+	@include clearfix-full();
+}
+
 .updated:not(.published) {
 	display: none;
 }

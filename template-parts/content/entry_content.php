@@ -29,7 +29,6 @@ namespace Anwas_Scratch;
 		)
 	);
 
-	// Įrašo navigacijos nuorodos (jei įrašas suskirstytas į kelis puslapius).
-	wp_link_pages();
+	get_template_part( 'template-parts/content/post-page-nav-links' );
 	?>
 </div> <!-- END .entry__content -->
