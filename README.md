@@ -32,16 +32,42 @@ find ./ -type f -exec sed -i 's/anwas-scratch/nauja-tema/g' {} \;
 find ./ -type f -exec sed -i 's/Anwas Scratch/Nauja tema/g' {} \;
 ```
 
-Jei norite pakeisti temos versijos numerį visuose failuose pavyzdžiui iš 1.0.0 į 1.1.0, įveskite šią komandą:
+6. Jei norite pakeisti temos versijos numerį visuose failuose pavyzdžiui iš 1.0.0 į 1.1.0, įveskite šią **ARBA** sekančią komandą:
 
 ```
 find ./ -type f -exec sed -i 's/1.0.0/1.1.0/g' {} \;
 ```
 
-Dar gali reikti pakeisti failų ir aplankų pavadinimus (visuose pavadinimuose teksto dalį „anwas-scratch“ pakeisti į „nauja-tema“) – komanda įvedama vis dar būnant komandinėje eilutėje temos aplanke:
+Ankstesnė komanda pakeis visas versijas ir tose eilutėse, kurios turi tekstą „**@since 1.0.0**“, o tai nėra logiška. Todėl, norint pakeitimo metu praleisti visas eilutes, kurios turi žodį „**@since**“, galima naudoti sekančią komandą vietoj aukščiau esančios:
+
+```
+find ./ -type f -exec sed -i -E '/(@since)/!s/1.0.0/1.1.0/g' {} \;
+```
+
+7. Dar gali reikti pakeisti failų ir aplankų pavadinimus (visuose pavadinimuose teksto dalį „anwas-scratch“ pakeisti į „nauja-tema“) – komanda įvedama vis dar būnant komandinėje eilutėje temos aplanke.
+
+- Pakeisti visų failų pavadinimus, kurie prasideda „anwas-scratch“ į failų pavadinimus su pradžia „nauja-tema“:
 
 ```
 find . -name "anwas-scratch*" -type f -print0 | xargs -0 -I {} sh -c 'mv "{}" "$(dirname "{}")/`echo $(basename "{}") | sed 's/^anwas-scratch/nauja-tema/g'`"'
+```
+
+- Pakeisti visų failų pavadinimus, kurie prasideda „anwas_scratch“ į failų pavadinimus su pradžia „nauja_tema“:
+
+```
+find . -name "anwas_scratch*" -type f -print0 | xargs -0 -I {} sh -c 'mv "{}" "$(dirname "{}")/`echo $(basename "{}") | sed 's/^anwas_scratch/nauja_tema/g'`"'
+```
+
+- Analogiškai ir aplankams, kurie prasideda „anwas-scratch“ į aplankų pavadinimus su pradžia „nauja-tema“ (pakeistas -type iš „f“ į „d“):
+
+```
+find . -name "anwas-scratch*" -type d -print0 | xargs -0 -I {} sh -c 'mv "{}" "$(dirname "{}")/`echo $(basename "{}") | sed 's/^anwas-scratch/nauja-tema/g'`"'
+```
+
+- Pakeisti visų aplankų pavadinimus, kurie prasideda „anwas_scratch“ į aplankų pavadinimus su pradžia „nauja_tema“:
+
+```
+find . -name "anwas_scratch*" -type d -print0 | xargs -0 -I {} sh -c 'mv "{}" "$(dirname "{}")/`echo $(basename "{}") | sed 's/^anwas_scratch/nauja_tema/g'`"'
 ```
 
 Ir po šio veiksmo belieka rankiniu būdu pakeisti pagrindinio temos aplanko pavadinimą iš „anwas-scratch“ į „nauja-tema“ ir style.css faile Autoriaus ir Temos nuorodas pakeisti į norimas.
