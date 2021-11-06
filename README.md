@@ -44,9 +44,13 @@ Ankstesnė komanda pakeis visas versijas ir tose eilutėse, kurios turi tekstą 
 find ./ -type f -exec sed -i -E '/(@since)/!s/1.0.0/1.1.0/g' {} \;
 ```
 
+<<<<<<< HEAD
 7. Dar gali reikti pakeisti failų ir aplankų pavadinimus (visuose pavadinimuose teksto dalį „anwas-scratch“ pakeisti į „nauja-tema“) – komanda įvedama vis dar būnant komandinėje eilutėje temos aplanke.
 
 - Pakeisti visų failų pavadinimus, kurie prasideda „anwas-scratch“ į failų pavadinimus su pradžia „nauja-tema“:
+=======
+Dar gali reikti pakeisti failų ir aplankų pavadinimus (visuose pavadinimuose teksto dalį „anwas-scratch“ pakeisti į „nauja-tema“) – komanda įvedama vis dar būnant komandinėje eilutėje temos aplanke:
+>>>>>>> 81abe7b1d8304f6927568ec00147967afd681ef5
 
 ```
 find . -name "anwas-scratch*" -type f -print0 | xargs -0 -I {} sh -c 'mv "{}" "$(dirname "{}")/`echo $(basename "{}") | sed 's/^anwas-scratch/nauja-tema/g'`"'
