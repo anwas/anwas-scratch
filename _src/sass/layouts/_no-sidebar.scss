@@ -1,11 +1,11 @@
-.no-sidebar {
+.no-sidebars {
 
 	.site {
 		display: grid;
 		grid-template-columns: auto;
 		grid-template-areas:
 			"header"
-			"main"
+			"content"
 			"footer";
 	}
 }

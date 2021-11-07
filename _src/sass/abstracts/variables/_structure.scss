@@ -1,2 +1,7 @@
 $size__site-main: 100%;
+$size__site-content: 100%;
 $size__site-sidebar: 25%;
+$size__site-sidebar--primary: 300px;
+$size__site-sidebar--secondary: 240px;
+$size__site-sidebar--max-one-of-two: max( $size__site-sidebar--primary, $size__site-sidebar--secondary );
+$size__site-sidebar--min-one-of-two: min( $size__site-sidebar--primary, $size__site-sidebar--secondary );

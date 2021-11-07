@@ -3,7 +3,7 @@
 	grid-template-columns: ($size__site-sidebar) auto;
 	grid-template-areas:
 		"header header"
-		"sidebar main"
+		"sidebar content"
 		"footer footer";
 }
 
@@ -11,8 +11,8 @@
 	grid-area: header;
 }
 
-.site-main {
-	grid-area: main;
+.site-content {
+	grid-area: content;
 	overflow: hidden; /* Resolves issue with <pre> elements forcing full width. */
 }
 
