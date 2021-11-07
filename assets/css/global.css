@@ -14,6 +14,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 	- Links
 	- Forms
 ## Layouts
+	- Holy Grail Layout
 # Components
 	- Navigation
 	- Posts and pages
@@ -381,11 +382,17 @@ h3,
 h4,
 h5,
 h6 {
-  clear: both;
+  clear: right;
 }
 
 p {
   margin-bottom: 1.5em;
+}
+p:first-of-type {
+  margin-top: 0;
+}
+p:last-of-type {
+  margin-bottom: 0;
 }
 
 dfn,
@@ -451,7 +458,7 @@ hr {
 
 ul,
 ol {
-  margin: 0 0 1.5em 3em;
+  margin: 0 0 1.5em;
 }
 
 ul {
@@ -596,6 +603,164 @@ textarea {
 /*--------------------------------------------------------------
 # Layouts
 --------------------------------------------------------------*/
+html,
+body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  overflow-y: auto;
+}
+body.admin-bar {
+  height: calc( 100vh - 48px );
+}
+@media screen and (min-width: 783px) {
+  body.admin-bar {
+    height: calc( 100vh - 32px );
+  }
+}
+body.post, body.page {
+  margin: 0;
+}
+
+.site {
+  display: grid;
+  align-items: start;
+  grid-template-columns: auto;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: "header" "content" "footer";
+  height: 100%;
+}
+
+.site-header {
+  grid-area: header;
+}
+
+.site-content {
+  height: 100%;
+  background: #f0f0f0;
+}
+
+.sidebar-primary {
+  background: white;
+  grid-area: sidebar-primary;
+}
+
+.sidebar-secondary {
+  background: white;
+  grid-area: sidebar-secondary;
+}
+
+.site-footer {
+  grid-area: footer;
+}
+
+.site-content {
+  height: 100%;
+  padding: 3px;
+  display: grid;
+  gap: 3px;
+  grid-template-columns: 1fr;
+  grid-area: content;
+}
+.site-content .content-area {
+  grid-area: content-area;
+  background: white;
+}
+.no-sidebars .site-content {
+  grid-template-rows: 1fr;
+  grid-template-areas: "content-area";
+}
+.has-sidebars--one-sidebar .site-content {
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "content-area" "widgets-area";
+}
+.has-sidebars--one-sidebar .site-content .widgets-area {
+  grid-area: widgets-area;
+}
+@media screen and (min-width: 640px) {
+  .has-sidebars--one-sidebar .site-content {
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "widgets-area content-area" "widgets-area content-area";
+  }
+}
+@media screen and (min-width: 768px) {
+  .has-sidebars--one-sidebar .site-content {
+    grid-template-columns: 300px 1fr;
+  }
+}
+@media screen and (min-width: 1360px) {
+  .has-sidebars--one-sidebar .site-content {
+    grid-template-columns: 400px 1fr;
+  }
+}
+@media screen and (min-width: 640px) {
+  .has-sidebars--one-sidebar.has-sidebars--secondary-sidebar .site-content {
+    grid-template-columns: 1fr 240px;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "content-area widgets-area" "content-area widgets-area";
+  }
+}
+@media screen and (min-width: 768px) {
+  .has-sidebars--one-sidebar.has-sidebars--secondary-sidebar .site-content {
+    grid-template-columns: 1fr 240px;
+  }
+}
+@media screen and (min-width: 960px) {
+  .has-sidebars--one-sidebar.has-sidebars--secondary-sidebar .site-content {
+    grid-template-columns: 1fr 300px;
+  }
+}
+@media screen and (min-width: 1360px) {
+  .has-sidebars--one-sidebar.has-sidebars--secondary-sidebar .site-content {
+    grid-template-columns: 1fr 400px;
+  }
+}
+.has-sidebars--two-sidebars .site-content {
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas: "content-area" "sidebar-primary" "sidebar-secondary";
+}
+@media screen and (min-width: 480px) {
+  .has-sidebars--two-sidebars .site-content {
+    grid-template-columns: 50% 50%;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "content-area content-area" "sidebar-primary sidebar-secondary";
+  }
+}
+@media screen and (min-width: 640px) {
+  .has-sidebars--two-sidebars .site-content {
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "sidebar-primary content-area" "sidebar-secondary content-area";
+  }
+}
+@media screen and (min-width: 768px) {
+  .has-sidebars--two-sidebars .site-content {
+    grid-template-columns: 300px 1fr;
+  }
+}
+@media screen and (min-width: 1000px) {
+  .has-sidebars--two-sidebars .site-content {
+    grid-template-columns: 300px 1fr 240px;
+    grid-template-rows: 1fr;
+    grid-template-areas: "sidebar-primary content-area sidebar-secondary";
+  }
+}
+@media screen and (min-width: 1600px) {
+  .has-sidebars--two-sidebars .site-content {
+    grid-template-columns: 300px 1fr 300px;
+  }
+}
+@media screen and (min-width: 1920px) {
+  .has-sidebars--two-sidebars .site-content {
+    grid-template-columns: 400px 1fr 400px;
+  }
+}
+
 /*--------------------------------------------------------------
 # Components
 --------------------------------------------------------------*/
