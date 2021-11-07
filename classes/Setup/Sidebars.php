@@ -13,12 +13,16 @@ namespace Anwas_Scratch\Setup;
 
 // Globalios WordPress funkcijos.
 use function \add_action;
+use function \add_filter;
+use function \apply_filters;
 use function \register_sidebar;
 use function \is_active_sidebar;
 use function \dynamic_sidebar;
 
 /**
  * Klasė, skirta Sidebars palaikymui.
+ *
+ * Registruoja valdiklių sritis, filtruoja „body“ elemento klases.
  */
 class Sidebars {
 	const PRIMARY_SIDEBAR_SLUG   = 'primary';
@@ -32,6 +36,7 @@ class Sidebars {
 	 */
 	public function register(): void {
 		add_action( 'widgets_init', array( $this, 'action_register_sidebars' ) );
+		add_filter( 'body_class', array( $this, 'filter_body_classes' ) );
 	}
 
 
@@ -77,6 +82,77 @@ class Sidebars {
 				'after_title'   => '</h3>',
 			)
 		);
+	}
+
+	/**
+	 * Filtruoja dabartinio įrašo ar puslapio „body“ elemento CSS klasių pavadinimų masyvą.
+	 *
+	 * Prideda CSS klases atsižvelgiant į tai, kokios valdiklių sritys aktyvios ar neaktyvios.
+	 *
+	 * @param array $classes „body“ elemento CSS klasių pavadinimų masyvas.
+	 *
+	 * @return array
+	 */
+	public function filter_body_classes( array $classes ): array {
+		/**
+		 * Valdiklių CSS klasių masyvas.
+		 *
+		 * @var array $sidebars_classes
+		 */
+		$sidebars_classes = array();
+
+		// Aktyvi tik „footer“ (svetainės poraštės) valdiklių sritis.
+		if ( self::is_footer_sidebar_active() ) {
+			$sidebars_classes[] = 'has-footer-sidebar';
+		}
+
+		// Jei „primary“ (pagrindinė) ir „secondary“ (papildoma) valdyklių sritys neaktyvios,
+		// pridedame klasę, pritaikome filtrą ir iš karto baigiame filtravimą.
+		if ( ! self::is_primary_sidebar_active() && ! self::is_secondary_sidebar_active() ) {
+			$sidebars_classes[] = 'no-sidebars';
+
+			/** Šis filtras dokumentuotas faile classes/Setup/Sidebars.php */
+			$sidebars_classes = apply_filters( 'anwas_scratch_sidebars_classes', $sidebars_classes );
+
+			$classes = array_merge( $classes, $sidebars_classes );
+
+			return $classes;
+		}
+
+		// Šioje vietoje jau aišku, kad aktyvi bent viena valdiklių sritis.
+		$sidebars_classes[] = 'has-sidebars';
+
+		// Aktyvi tik „primary“ (pagrindinė) valdiklių sritis.
+		if ( self::is_primary_sidebar_active() && ! self::is_secondary_sidebar_active() ) {
+			$sidebars_classes[] = 'has-sidebars--one-sidebar';
+			$sidebars_classes[] = 'has-sidebars--' . static::PRIMARY_SIDEBAR_SLUG . '-sidebar';
+		}
+
+		// Aktyvi tik „secondary“ (papildoma) valdiklių sritis.
+		if ( ! self::is_primary_sidebar_active() && self::is_secondary_sidebar_active() ) {
+			$sidebars_classes[] = 'has-sidebars--one-sidebar';
+			$sidebars_classes[] = 'has-sidebars--' . static::SECONDARY_SIDEBAR_SLUG . '-sidebar';
+		}
+
+		// Aktyvios abi „primary“ (pagrindinė) ir „secondary“ (papildoma) valdiklių sritys.
+		if ( self::is_primary_sidebar_active() && self::is_secondary_sidebar_active() ) {
+			$sidebars_classes[] = 'has-sidebars--two-sidebars';
+			$sidebars_classes[] = 'has-sidebars--' . static::PRIMARY_SIDEBAR_SLUG . '-sidebar';
+			$sidebars_classes[] = 'has-sidebars--' . static::SECONDARY_SIDEBAR_SLUG . '-sidebar';
+		}
+
+		/**
+		 * Filtras valdiklių CSS klasių masyvui.
+		 *
+		 * @param array $sidebars_classes Valdiklių CSS klasių masyvas.
+		 *
+		 * return array
+		 */
+		$sidebars_classes = apply_filters( 'anwas_scratch_sidebars_classes', $sidebars_classes );
+
+		$classes = array_merge( $classes, $sidebars_classes );
+
+		return $classes;
 	}
 
 	/**
