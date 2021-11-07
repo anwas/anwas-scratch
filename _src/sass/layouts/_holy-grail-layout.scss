@@ -43,17 +43,13 @@ body {
 
 .site-content {
 	height: 100%;
-
-	background: $color__gray-100;
 }
 
 .sidebar-primary {
-	background: rgb(255, 255, 255);
 	grid-area: sidebar-primary;
 }
 
 .sidebar-secondary {
-	background: rgb(255, 255, 255);
 	grid-area: sidebar-secondary;
 }
 
@@ -63,17 +59,16 @@ body {
 
 .site-content {
 	height: 100%;
-	padding: 3px;
+	padding: 2px;
 
 	display: grid;
-	gap: 3px;
+	gap: 2px;
 	grid-template-columns: 1fr;
 
 	grid-area: content;
 
 	.content-area {
 		grid-area: content-area;
-		background: rgb(255, 255, 255);
 	}
 
 	.no-sidebars & {
