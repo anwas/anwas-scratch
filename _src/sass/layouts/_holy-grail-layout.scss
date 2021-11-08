@@ -2,7 +2,8 @@ html,
 body {
 	margin: 0;
 	padding: 0;
-	// overflow-x: hidden;
+	overflow-x: hidden;
+	max-width: 100%;
 }
 
 body {
@@ -23,6 +24,7 @@ body {
 		"footer";
 
 	min-height: 100vh;
+	max-width: 100vw;
 
 	.admin-bar & {
 		min-height: calc( 100vh - 48px );
@@ -39,6 +41,7 @@ body {
 
 .site-content {
 	height: 100%;
+	max-width: 100vw;
 }
 
 .sidebar-primary {
@@ -63,8 +66,11 @@ body {
 
 	grid-area: content;
 
+	min-width: 0; // Fix: neleidžia išsiplėsti už ribų pre elementams. Kitas būdas grid-template-columns: minmax(0, 1fr) 300px; grid elementui.
+
 	.content-area {
 		grid-area: content-area;
+		min-width: 0;
 	}
 
 	.no-sidebars & {
@@ -88,7 +94,7 @@ body {
 		}
 
 		@media screen and ( min-width: 640px ) {
-			grid-template-columns: min( $size__site-sidebar--primary, 240px )  1fr;
+			grid-template-columns: min( $size__site-sidebar--primary, 240px ) 1fr;
 			grid-template-rows: auto 1fr;
 
 			grid-template-areas:
