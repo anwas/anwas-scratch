@@ -31,12 +31,10 @@ $header_bg_class = '';
 </style>
 
 <div class="site-branding<?php echo $header_bg_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
-	<?php
-	Anwas_Scratch_Custom_Logo::display_custom_logo();
-
-	?>
 	<div class="site-title-box">
 		<?php
+		Anwas_Scratch_Custom_Logo::display_custom_logo();
+
 		if ( is_front_page() && is_home() ) {
 			?>
 			<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
