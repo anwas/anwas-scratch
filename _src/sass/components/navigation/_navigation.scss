@@ -2,9 +2,12 @@ $breakpoint__large-menu: 1000px;
 
 .main-navigation {
 	width: 100%;
+	background-color: $color__dark;
 
 	.primary-menu-container {
 		display: none;
+
+		border-top: 3px solid #fff;
 
 		&.toggled {
 			display: block;
@@ -15,16 +18,16 @@ $breakpoint__large-menu: 1000px;
 		margin: 0;
 		padding: 0;
 		list-style-type: none;
-		background-color: $color__dark;
 	}
 
 	a {
 		display: flex;
 		align-items: center;
 
-		padding: 0.25rem 1rem;
+		padding: 1rem;
 
 		color: $color__gray-100;
+		line-height: 1;
 
 		text-decoration: none;
 
@@ -47,12 +50,12 @@ $breakpoint__large-menu: 1000px;
 		display: none;
 
 		a {
-			padding: 0.25rem 2rem;
+			padding: 1rem 2rem;
 		}
 
 		.sub-menu {
 			a {
-				padding: 0.25rem 3rem;
+				padding: 1rem 3rem;
 			}
 		}
 	}
@@ -83,6 +86,7 @@ $breakpoint__large-menu: 1000px;
 
 		.primary-menu-container {
 			display: block;
+			border-top: none;
 		}
 
 		ul {
@@ -96,10 +100,6 @@ $breakpoint__large-menu: 1000px;
 		.menu {
 			display: flex;
 			padding: 0;
-
-			> li a {
-				padding: 1rem;
-			}
 		}
 
 		.sub-menu {
@@ -110,10 +110,11 @@ $breakpoint__large-menu: 1000px;
 			max-width: 280px;
 
 			a {
-				padding: 0.25rem 1rem;
 				background-color: $color__gray-700;
 
 				white-space: nowrap;
+
+				padding: 1rem;
 
 				&:focus,
 				&:hover {
@@ -123,11 +124,14 @@ $breakpoint__large-menu: 1000px;
 			}
 
 			.sub-menu {
+				a {
+					padding: 1rem;
+				}
+			}
+
+			.sub-menu {
 				top: 0;
 				left: 100%;
-				a {
-					padding: 0.25rem 1rem;
-				}
 			}
 		}
 	}
@@ -139,8 +143,9 @@ $breakpoint__large-menu: 1000px;
 	border-radius: 0;
 	background-color: $color__dark;
 	color: $color__gray-100;
+	line-height: 1;
 
-	padding: 0.75rem 2rem;
+	padding: 1rem;
 
 	cursor: pointer;
 }
