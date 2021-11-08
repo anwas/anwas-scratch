@@ -89,10 +89,12 @@ class Custom_Header {
 	 */
 	public static function display_custom_header_image(): void {
 
-		if ( has_header_image() ) {
+		if ( has_header_image() && 'blank' === get_header_textcolor() ) {
 			?>
 			<figure class="header-image">
-				<?php the_header_image_tag(); ?>
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
+					<?php the_header_image_tag(); ?>
+				</a>
 			</figure><!-- .header-image -->
 			<?php
 		}
