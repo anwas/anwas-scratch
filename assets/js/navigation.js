@@ -1,4 +1,4 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 var __webpack_exports__ = {};
 /*!*****************************************************************************!*\
   !*** ../sites/wp/web/wp-content/themes/anwas-scratch/_src/js/navigation.js ***!

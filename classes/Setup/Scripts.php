@@ -68,14 +68,26 @@ class Scripts {
 		}
 
 		$js_files = array(
+			'anwas-polyfills' => array( // Registruojamas IE11 polyfill failas.
+				'file'             => '/assets/js/polyfills.js',
+				'enqueue_callback' => '__return_false', // Tik registruojamas ir paskui naudojamas kaip priklausomybė.
+				'in_footer'        => true,
+			),
 			'anwas-scratch-main' => array(
 				'file'             => '/assets/js/main.js',
-				'enqueue_callback' => function() {
-					return is_front_page();
-				},
+				'global'           => true,
+				'deps'             => array(
+					'anwas-polyfills',
+				),
+				// 'enqueue_callback' => function() {
+				// return is_front_page();
+				// },
 			),
 			'anwas-navigation' => array(
 				'file'        => '/assets/js/navigation.js',
+				'deps'        => array(
+					'anwas-polyfills',
+				),
 				'in_footer'   => false,
 				'defer'       => true,
 				'localize'    => array(
