@@ -53,7 +53,7 @@ class Custom_Header {
 				'anwas_scratch_custom_header_args',
 				array(
 					'default-image'      => '',
-					'default-text-color' => '000000',
+					'default-text-color' => 'ffffff',
 					'width'              => 1600,
 					'height'             => 250,
 					'flex-width'         => true,
@@ -75,7 +75,7 @@ class Custom_Header {
 		}
 
 		if ( ! display_header_text() ) {
-			echo '<style type="text/css">.site-title, .site-description { position: absolute; clip: rect(1px, 1px, 1px, 1px); }</style>';
+			echo '<style type="text/css">.site-branding { position: absolute; clip: rect(1px, 1px, 1px, 1px); }</style>';
 			return;
 		}
 

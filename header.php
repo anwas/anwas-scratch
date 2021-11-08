@@ -27,12 +27,8 @@ namespace Anwas_Scratch;
 <div id="page" class="site">
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'anwas-scratch' ); ?></a>
 
-	<header id="masthead" class="site-header" role="branding">
-		<?php
-		get_template_part( 'template-parts/header/branding' ); // Viduje dar įtrauktas custom_header failas. Pagal pareikį struktūros išdėstymą galima paprastai keisti.
-
-		get_template_part( '/template-parts/header/navigation' );
-		?>
-	</header>
+	<?php
+	get_template_part( '/template-parts/header/site_header' );
+	?>
 
 	<div id="content" class="site-content"><?php // Uždaroma footer.php faile. ?>
