@@ -70,7 +70,7 @@ function actionCustomizerHeaderTextColor() {
 				site_branding.style.position = 'absolute';
 			} else {
 				site_branding.style.clip = 'auto';
-				site_branding.style.position = 'static';
+				site_branding.style.position = 'relative';
 				site_title.style.color = to;
 				site_description.style.color = to;
 			}

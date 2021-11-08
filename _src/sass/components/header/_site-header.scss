@@ -1,7 +1,18 @@
 .site-header {
-	p,
-	figure {
+	p {
 		margin: 0;
+	}
+}
+
+.header-image {
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	font-size: 0;
+
+	img {
+		display: block;
+		margin: 0 auto;
 	}
 }
 
@@ -9,6 +20,15 @@
 	text-align: center;
 	background-color: #2c86ba;
 	color: #fff;
+
+	&.header-background-image {
+		background-repeat: no-repeat;
+		background-size: cover;
+
+		.site-title-box {
+			background: rgba(0, 0, 0, 0.7);
+		}
+	}
 
 	@media screen and (min-width: 640px) {
 		padding: 1rem 0;
@@ -42,8 +62,4 @@
 .site-description {
 	font-weight: 100;
 	font-size: 1.5rem;
-}
-
-.header-image {
-	overflow: hidden;
 }

@@ -349,14 +349,14 @@ template {
 --------------------------------------------- */
 /* Inherit box-sizing to more easily change it's value on a component level.
 @link http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+html {
+  box-sizing: border-box;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: inherit;
-}
-
-html {
-  box-sizing: border-box;
 }
 
 /*--------------------------------------------------------------
@@ -605,23 +605,10 @@ textarea {
 --------------------------------------------------------------*/
 html,
 body {
-  overflow-x: hidden;
   margin: 0;
   padding: 0;
 }
 
-body {
-  height: 100vh;
-  overflow-y: auto;
-}
-body.admin-bar {
-  height: calc( 100vh - 48px );
-}
-@media screen and (min-width: 783px) {
-  body.admin-bar {
-    height: calc( 100vh - 32px );
-  }
-}
 body.post, body.page {
   margin: 0;
 }
@@ -632,7 +619,15 @@ body.post, body.page {
   grid-template-columns: 100%;
   grid-template-rows: auto 1fr auto;
   grid-template-areas: "header" "content" "footer";
-  height: 100%;
+  min-height: 100vh;
+}
+.admin-bar .site {
+  min-height: calc( 100vh - 48px );
+}
+@media screen and (min-width: 783px) {
+  .admin-bar .site {
+    min-height: calc( 100vh - 32px );
+  }
 }
 
 .site-header {
@@ -782,15 +777,32 @@ body.post, body.page {
 
 /* Header
 --------------------------------------------- */
-.site-header p,
-.site-header figure {
+.site-header p {
   margin: 0;
+}
+
+.header-image {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+}
+.header-image img {
+  display: block;
+  margin: 0 auto;
 }
 
 .site-branding {
   text-align: center;
   background-color: #2c86ba;
   color: #fff;
+}
+.site-branding.header-background-image {
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.site-branding.header-background-image .site-title-box {
+  background: rgba(0, 0, 0, 0.7);
 }
 @media screen and (min-width: 640px) {
   .site-branding {
@@ -827,17 +839,15 @@ body.post, body.page {
   font-size: 1.5rem;
 }
 
-.header-image {
-  overflow: hidden;
-}
-
 /* Navigation
 --------------------------------------------- */
 .main-navigation {
   width: 100%;
+  background-color: #3e3e3e;
 }
 .main-navigation .primary-menu-container {
   display: none;
+  border-top: 3px solid #fff;
 }
 .main-navigation .primary-menu-container.toggled {
   display: block;
@@ -846,13 +856,13 @@ body.post, body.page {
   margin: 0;
   padding: 0;
   list-style-type: none;
-  background-color: #3e3e3e;
 }
 .main-navigation a {
   display: flex;
   align-items: center;
-  padding: 0.25rem 1rem;
+  padding: 1rem;
   color: #f0f0f0;
+  line-height: 1;
   text-decoration: none;
 }
 .main-navigation a:focus, .main-navigation a:active, .main-navigation a:hover {
@@ -868,10 +878,10 @@ body.post, body.page {
   display: none;
 }
 .main-navigation .sub-menu a {
-  padding: 0.25rem 2rem;
+  padding: 1rem 2rem;
 }
 .main-navigation .sub-menu .sub-menu a {
-  padding: 0.25rem 3rem;
+  padding: 1rem 3rem;
 }
 .main-navigation .menu-item--toggled-on {
   background-color: #313131;
@@ -895,6 +905,7 @@ body.post, body.page {
   }
   .main-navigation .primary-menu-container {
     display: block;
+    border-top: none;
   }
   .main-navigation ul {
     background-color: transparent;
@@ -906,9 +917,6 @@ body.post, body.page {
     display: flex;
     padding: 0;
   }
-  .main-navigation .menu > li a {
-    padding: 1rem;
-  }
   .main-navigation .sub-menu {
     position: absolute;
     top: 100%;
@@ -917,20 +925,20 @@ body.post, body.page {
     max-width: 280px;
   }
   .main-navigation .sub-menu a {
-    padding: 0.25rem 1rem;
     background-color: #505050;
     white-space: nowrap;
+    padding: 1rem;
   }
   .main-navigation .sub-menu a:focus, .main-navigation .sub-menu a:hover {
     outline: none;
     background-color: #3e3e3e;
   }
+  .main-navigation .sub-menu .sub-menu a {
+    padding: 1rem;
+  }
   .main-navigation .sub-menu .sub-menu {
     top: 0;
     left: 100%;
-  }
-  .main-navigation .sub-menu .sub-menu a {
-    padding: 0.25rem 1rem;
   }
 }
 
@@ -939,7 +947,8 @@ body.post, body.page {
   border-radius: 0;
   background-color: #3e3e3e;
   color: #f0f0f0;
-  padding: 0.75rem 2rem;
+  line-height: 1;
+  padding: 1rem;
   cursor: pointer;
 }
 

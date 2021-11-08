@@ -1,23 +1,11 @@
 html,
 body {
-	overflow-x: hidden;
-
 	margin: 0;
 	padding: 0;
+	// overflow-x: hidden;
 }
 
 body {
-	height: 100vh;
-	overflow-y: auto;
-
-	&.admin-bar {
-		height: calc( 100vh - 48px );
-
-		@media screen and ( min-width: 783px ) {
-			height: calc( 100vh - 32px );
-		}
-	}
-
 	&.post,
 	&.page {
 		margin: 0;
@@ -34,7 +22,15 @@ body {
 		"content"
 		"footer";
 
-	height: 100%;
+	min-height: 100vh;
+
+	.admin-bar & {
+		min-height: calc( 100vh - 48px );
+
+		@media screen and ( min-width: 783px ) {
+			min-height: calc( 100vh - 32px );
+		}
+	}
 }
 
 .site-header {

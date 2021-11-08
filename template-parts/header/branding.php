@@ -13,21 +13,28 @@ namespace Anwas_Scratch;
 
 use \Anwas_Scratch\Setup\Custom_Logo as Anwas_Scratch_Custom_Logo;
 
-$branding_bg = get_theme_mod( 'anwas_scratch_branding_bg', '#2c86ba' );
+$branding_bg     = get_theme_mod( 'anwas_scratch_branding_bg', '#2c86ba' );
+$header_bg_class = '';
 ?>
 <style>
 	.site-branding {
 		background-color: <?php echo esc_attr( $branding_bg ); ?>;
+		<?php
+		if ( has_header_image() && 'blank' !== get_header_textcolor() ) {
+			$header_bg_class = ' header-background-image';
+			?>
+			background-image: url( <?php header_image(); ?> );
+			<?php
+		}
+		?>
 	}
 </style>
 
-<div class="site-branding">
-	<?php
-	Anwas_Scratch_Custom_Logo::display_custom_logo();
-
-	?>
+<div class="site-branding<?php echo $header_bg_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 	<div class="site-title-box">
 		<?php
+		Anwas_Scratch_Custom_Logo::display_custom_logo();
+
 		if ( is_front_page() && is_home() ) {
 			?>
 			<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
@@ -48,9 +55,5 @@ $branding_bg = get_theme_mod( 'anwas_scratch_branding_bg', '#2c86ba' );
 		}
 		?>
 	</div>
-	<?php
-
-	get_template_part( 'template-parts/header/custom_header' );
-	?>
 </div>
 <!-- END .site-branding -->
