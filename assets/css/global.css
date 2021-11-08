@@ -607,6 +607,8 @@ html,
 body {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body.post, body.page {
@@ -620,6 +622,7 @@ body.post, body.page {
   grid-template-rows: auto 1fr auto;
   grid-template-areas: "header" "content" "footer";
   min-height: 100vh;
+  max-width: 100vw;
 }
 .admin-bar .site {
   min-height: calc( 100vh - 48px );
@@ -636,6 +639,7 @@ body.post, body.page {
 
 .site-content {
   height: 100%;
+  max-width: 100vw;
 }
 
 .sidebar-primary {
@@ -657,9 +661,11 @@ body.post, body.page {
   gap: 2px;
   grid-template-columns: 1fr;
   grid-area: content;
+  min-width: 0;
 }
 .site-content .content-area {
   grid-area: content-area;
+  min-width: 0;
 }
 .no-sidebars .site-content {
   grid-template-rows: 1fr;
