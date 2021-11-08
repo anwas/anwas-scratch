@@ -349,14 +349,14 @@ template {
 --------------------------------------------- */
 /* Inherit box-sizing to more easily change it's value on a component level.
 @link http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+html {
+  box-sizing: border-box;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: inherit;
-}
-
-html {
-  box-sizing: border-box;
 }
 
 /*--------------------------------------------------------------
@@ -605,23 +605,10 @@ textarea {
 --------------------------------------------------------------*/
 html,
 body {
-  overflow-x: hidden;
   margin: 0;
   padding: 0;
 }
 
-body {
-  height: 100vh;
-  overflow-y: auto;
-}
-body.admin-bar {
-  height: calc( 100vh - 48px );
-}
-@media screen and (min-width: 783px) {
-  body.admin-bar {
-    height: calc( 100vh - 32px );
-  }
-}
 body.post, body.page {
   margin: 0;
 }
@@ -632,7 +619,15 @@ body.post, body.page {
   grid-template-columns: 100%;
   grid-template-rows: auto 1fr auto;
   grid-template-areas: "header" "content" "footer";
-  height: 100%;
+  min-height: 100vh;
+}
+.admin-bar .site {
+  min-height: calc( 100vh - 48px );
+}
+@media screen and (min-width: 783px) {
+  .admin-bar .site {
+    min-height: calc( 100vh - 32px );
+  }
 }
 
 .site-header {
