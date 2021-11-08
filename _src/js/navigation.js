@@ -27,13 +27,11 @@ function initNavigation() {
 
 	BODY_EL.addEventListener('keydown', (e) => {
 		if (KEYMAP.ESC === e.keyCode) {
-			console.log('ESC');
 			actionCloseAllMenus();
 		}
 	}, false);
 
 	BODY_EL.addEventListener('click', (e) => {
-		console.log('BODY click');
 		actionCloseAllMenus();
 	}, false);
 }

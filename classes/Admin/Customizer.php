@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Anwas_Scratch\Admin;
 
 use \WP_Customize_Manager;
+use \WP_Customize_Color_Control;
 
 // Globalios WordPress funkcijos.
 use function \add_action;
@@ -67,6 +68,40 @@ class Customizer {
 		);
 
 		$this->customize_footer_site_info_text( $wp_customize );
+		$this->customize_site_header_background_color( $wp_customize );
+	}
+
+	/**
+	 * Svetainės antraštės fono spalva.
+	 *
+	 * @param WP_Customize_Manager $wp_customize Temos Customizer objektas.
+	 *
+	 * @return void
+	 */
+	public function customize_site_header_background_color( WP_Customize_Manager $wp_customize ): void {
+
+		$wp_customize->add_setting(
+			'anwas_scratch_branding_bg',
+			array(
+				'type'                 => 'theme_mod', // 'theme_mod' arba 'option'.
+				'capability'           => 'edit_theme_options',
+				'default'              => '#2c86ba',
+				'transport'            => 'refresh', // 'refresh' arba 'postMessage'.
+				'sanitize_callback'    => '\sanitize_hex_color',
+			)
+		);
+
+		$wp_customize->add_control(
+			new WP_Customize_Color_Control(
+				$wp_customize,
+				'branding_bg_color',
+				array(
+					'section'    => 'colors',
+					'settings'   => 'anwas_scratch_branding_bg',
+					'label'      => __( 'Svetainės antraštės fono spalva', 'anwas-scratch' ),
+				)
+			)
+		);
 	}
 
 	/**

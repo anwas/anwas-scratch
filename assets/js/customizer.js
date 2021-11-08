@@ -59,10 +59,11 @@ function actionCustomizerSiteDescription() {
 }
 
 function actionCustomizerHeaderTextColor() {
+  var site_branding = document.querySelector('.site-branding');
   var site_title = document.querySelector('.site-title a');
   var site_description = document.querySelector('.site-description');
 
-  if (!site_title || !site_description) {
+  if (!site_branding || !site_title || !site_description) {
     return;
   } // Svetainės antraštės teksto spalva.
 
@@ -70,16 +71,12 @@ function actionCustomizerHeaderTextColor() {
   wp.customize('header_textcolor', function (value) {
     value.bind(function (to) {
       if ('blank' === to) {
-        site_title.style.clip = 'rect(1px, 1px, 1px, 1px)';
-        site_title.style.position = 'absolute';
-        site_description.style.clip = 'rect(1px, 1px, 1px, 1px)';
-        site_description.style.position = 'absolute';
+        site_branding.style.clip = 'rect(1px, 1px, 1px, 1px)';
+        site_branding.style.position = 'absolute';
       } else {
-        site_title.style.clip = 'auto';
-        site_title.style.position = 'relative';
+        site_branding.style.clip = 'auto';
+        site_branding.style.position = 'static';
         site_title.style.color = to;
-        site_description.style.clip = 'auto';
-        site_description.style.position = 'relative';
         site_description.style.color = to;
       }
     });

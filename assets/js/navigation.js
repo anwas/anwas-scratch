@@ -30,12 +30,10 @@ function initNavigation() {
   var BODY_EL = document.querySelector('html > body');
   BODY_EL.addEventListener('keydown', function (e) {
     if (KEYMAP.ESC === e.keyCode) {
-      console.log('ESC');
       actionCloseAllMenus();
     }
   }, false);
   BODY_EL.addEventListener('click', function (e) {
-    console.log('BODY click');
     actionCloseAllMenus();
   }, false);
 }
