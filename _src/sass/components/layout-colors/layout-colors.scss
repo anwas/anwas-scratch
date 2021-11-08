@@ -1,0 +1,23 @@
+.custom-background {
+	.site-header,
+	.site-footer,
+	.content-area,
+	.sidebar-primary,
+	.sidebar-secondary {
+		background: rgba(255, 255, 255, 0.95);
+	}
+
+	&.custom-background--img {
+		.site {
+			background: rgba( $color__gray-100, 0.7 );
+		}
+
+		.site-header,
+		.site-footer,
+		.content-area,
+		.sidebar-primary,
+		.sidebar-secondary {
+			background: rgba(255, 255, 255, 0.7);
+		}
+	}
+}

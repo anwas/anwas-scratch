@@ -641,16 +641,13 @@ body.post, body.page {
 
 .site-content {
   height: 100%;
-  background: #f0f0f0;
 }
 
 .sidebar-primary {
-  background: white;
   grid-area: sidebar-primary;
 }
 
 .sidebar-secondary {
-  background: white;
   grid-area: sidebar-secondary;
 }
 
@@ -660,15 +657,14 @@ body.post, body.page {
 
 .site-content {
   height: 100%;
-  padding: 3px;
+  padding: 2px;
   display: grid;
-  gap: 3px;
+  gap: 2px;
   grid-template-columns: 1fr;
   grid-area: content;
 }
 .site-content .content-area {
   grid-area: content-area;
-  background: white;
 }
 .no-sidebars .site-content {
   grid-template-rows: 1fr;
@@ -764,6 +760,26 @@ body.post, body.page {
 /*--------------------------------------------------------------
 # Components
 --------------------------------------------------------------*/
+/* Layout colors
+--------------------------------------------- */
+.custom-background .site-header,
+.custom-background .site-footer,
+.custom-background .content-area,
+.custom-background .sidebar-primary,
+.custom-background .sidebar-secondary {
+  background: rgba(255, 255, 255, 0.95);
+}
+.custom-background.custom-background--img .site {
+  background: rgba(240, 240, 240, 0.7);
+}
+.custom-background.custom-background--img .site-header,
+.custom-background.custom-background--img .site-footer,
+.custom-background.custom-background--img .content-area,
+.custom-background.custom-background--img .sidebar-primary,
+.custom-background.custom-background--img .sidebar-secondary {
+  background: rgba(255, 255, 255, 0.7);
+}
+
 /* Navigation
 --------------------------------------------- */
 .main-navigation {
