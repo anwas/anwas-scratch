@@ -35,6 +35,11 @@ var SEARCH_FORM_INIT = function SEARCH_FORM_INIT() {
       SEARCH_TOGGLE.setAttribute('aria-expanded', 'true');
       SEARCH_TOGGLE.setAttribute('aria-label', anwas_scratch_screen_reader_text.collapse_search_form);
       SEARCH_CONTAINER.classList.add('toggled');
+      var SEARCH_FIELD = SEARCH_CONTAINER.querySelector('.search-field');
+
+      if (SEARCH_FIELD) {
+        SEARCH_FIELD.focus();
+      }
     }
   }, false);
 };
