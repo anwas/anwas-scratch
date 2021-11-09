@@ -1,31 +1,120 @@
 /******/ (function() { // webpackBootstrap
-var __webpack_exports__ = {};
-/*!*****************************************************************************!*\
-  !*** ../sites/wp/web/wp-content/themes/anwas-scratch/_src/js/navigation.js ***!
-  \*****************************************************************************/
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "../sites/wp/web/wp-content/themes/anwas-scratch/_src/js/_search-form.js":
+/*!*******************************************************************************!*\
+  !*** ../sites/wp/web/wp-content/themes/anwas-scratch/_src/js/_search-form.js ***!
+  \*******************************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
 /* global anwas_scratch_screen_reader_text */
 
 /**
- * File navigation.js.
+ * Failas _search-form.js.
  *
- * Handles toggling the navigation menu for small screens and enables TAB key
- * navigation support for dropdown menus.
+ * Valdo paieškos formos svetainės antraštėje išskleidimą/suskleidimą.
  */
+var SEARCH_FORM_INIT = function SEARCH_FORM_INIT() {
+  var SEARCH_TOGGLE = document.querySelector('.search-toggle');
+  var SEARCH_CONTAINER = document.querySelector('.header-search-form');
+
+  if (!SEARCH_TOGGLE || !SEARCH_CONTAINER) {
+    return;
+  }
+
+  SEARCH_TOGGLE.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    if (SEARCH_CONTAINER.classList.contains('toggled')) {
+      SEARCH_TOGGLE.setAttribute('aria-expanded', 'false');
+      SEARCH_TOGGLE.setAttribute('aria-label', anwas_scratch_screen_reader_text.expand_search_form);
+      SEARCH_CONTAINER.classList.remove('toggled');
+    } else {
+      SEARCH_TOGGLE.setAttribute('aria-expanded', 'true');
+      SEARCH_TOGGLE.setAttribute('aria-label', anwas_scratch_screen_reader_text.collapse_search_form);
+      SEARCH_CONTAINER.classList.add('toggled');
+    }
+  }, false);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (SEARCH_FORM_INIT);
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+!function() {
+/*!*****************************************************************************!*\
+  !*** ../sites/wp/web/wp-content/themes/anwas-scratch/_src/js/navigation.js ***!
+  \*****************************************************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _search_form__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./_search-form */ "../sites/wp/web/wp-content/themes/anwas-scratch/_src/js/_search-form.js");
+/* global anwas_scratch_screen_reader_text */
+
+/**
+ * Failas navigation.js.
+ *
+ * Valdo naršymo meniu perjungimą mažuose ekranuose ir įgalina TAB klavišo
+ * naršymo palaikymą išskleidžiamiesiems meniu.
+ */
+
 var KEYMAP = {
   TAB: 9,
   ESC: 27
 };
 
 if ('loading' === document.readyState) {
-  // The DOM has not yet been loaded.
+  // DOM dar neužkrautas.
   document.addEventListener('DOMContentLoaded', initNavigation);
 } else {
-  // The DOM has already been loaded.
+  // DOM jau užkrautas.
   initNavigation();
-} // Initiate the menus when the DOM loads.
+} // Inicijuoja meniu, kai DOM užkrautas.
 
 
 function initNavigation() {
+  (0,_search_form__WEBPACK_IMPORTED_MODULE_0__["default"])();
   initNavToggleSubmenus();
   var BODY_EL = document.querySelector('html > body');
   BODY_EL.addEventListener('keydown', function (e) {
@@ -38,13 +127,13 @@ function initNavigation() {
   }, false);
 }
 /**
- * Initiate the script to process all
- * navigation menus with submenu toggle enabled.
+ * Inicijuoja scenarijų, kad būtų apdoroti visi naršymo meniu,
+ * kai įjungtas submeniu perjungimas.
  */
 
 
 function initNavToggleSubmenus() {
-  var NAV_TOGGLE = document.querySelectorAll('.main-navigation'); // No point if no navs.
+  var NAV_TOGGLE = document.querySelectorAll('.main-navigation'); // Nėra prasmės tęsti, jei nėra meniu elemento.
 
   if (!NAV_TOGGLE.length) {
     return;
@@ -117,9 +206,9 @@ function initEachDropdown(nav) {
   }
 }
 /**
- * Toggle submenus open and closed, and tell screen readers what's going on.
- * @param {Object} parentMenuItem Parent menu element.
- * @param {boolean} forceToggle Force the menu toggle.
+ * Perjungia submeniu atidarymą ir uždarymą ir praneša ekrano skaitytuvams, kas vyksta.
+ * @param {Object} parentMenuItem Tėvinis meniu elementas.
+ * @param {boolean} forceToggle Priverstinai perjungti meniu.
  * @return {void}
  */
 
@@ -132,25 +221,25 @@ function toggleSubMenu(parentMenuItem, forceToggle) {
   }
 
   var SUB_MENU = parentMenuItem.querySelector('ul');
-  var parentMenuItemToggled = parentMenuItem.classList.contains('menu-item--toggled-on'); // Will be true if we want to force the toggle on, false if force toggle close.
+  var parentMenuItemToggled = parentMenuItem.classList.contains('menu-item--toggled-on'); // Bus „true“, jei norime priverstinai įjungti, „false“, jei priverstinį perjungimą uždaryti.
 
   if (undefined !== forceToggle && 'boolean' === typeof forceToggle) {
     parentMenuItemToggled = !forceToggle;
-  } // Toggle aria-expanded status.
+  } // Perjungia aria-expanded būseną.
 
 
   TOGGLE_BUTTON.setAttribute('aria-expanded', (!parentMenuItemToggled).toString());
   /*
-   * Steps to handle during toggle:
-   * - Let the parent menu item know we're toggled on/off.
-   * - Toggle the ARIA label to let screen readers know will expand or collapse.
+   * Veiksmai, kuriuos reikia atlikti perjungimo metu:
+   * - Pranešame pagrindiniam meniu elementui, kad įjungiame / išjungiame.
+   * - Perjunti ARIA etiketę, kad ekrano skaitytuvai žinotų, kad išplėsta arba sutraukta.
    */
 
   if (parentMenuItemToggled) {
-    // Toggle "off" the submenu.
+    // Perjunti "off" submeniu elementui.
     parentMenuItem.classList.remove('menu-item--toggled-on');
     SUB_MENU.classList.remove('toggle-show');
-    TOGGLE_BUTTON.setAttribute('aria-label', anwas_scratch_screen_reader_text.expand); // Make sure all children are closed.
+    TOGGLE_BUTTON.setAttribute('aria-label', anwas_scratch_screen_reader_text.expand); // Įsitikinti, kad visi vaikai yra uždaryti.
 
     var SUB_MENU_ITEMS_TOGGLED = parentMenuItem.querySelectorAll('.menu-item--toggled-on');
 
@@ -158,12 +247,12 @@ function toggleSubMenu(parentMenuItem, forceToggle) {
       toggleSubMenu(SUB_MENU_ITEMS_TOGGLED[i], false);
     }
   } else {
-    // Make sure siblings are closed.
+    // Įsitikinti, kad broliai ir seserys (siblings) yra uždaryti.
     var PARENT_MENU_ITEMS_TOGGLED = parentMenuItem.parentNode.querySelectorAll('li.menu-item--toggled-on');
 
     for (var _i = 0; _i < PARENT_MENU_ITEMS_TOGGLED.length; _i++) {
       toggleSubMenu(PARENT_MENU_ITEMS_TOGGLED[_i], false);
-    } // Toggle "on" the submenu.
+    } // Perjunti "on" submeniu elementui.
 
 
     parentMenuItem.classList.add('menu-item--toggled-on');
@@ -173,7 +262,7 @@ function toggleSubMenu(parentMenuItem, forceToggle) {
 }
 
 function actionCloseAllMenus() {
-  var NAV = document.querySelector('nav.main-navigation'); // No point if no nav menu.
+  var NAV = document.querySelector('nav.main-navigation'); // Nėra prasmės tęsti, jei nėra meniu.
 
   if (!NAV) {
     return;
@@ -209,6 +298,7 @@ function actionCloseAllMenus() {
     toggleSubMenu(PARENT_MENU_ITEMS_TOGGLED[i], false);
   }
 }
+}();
 /******/ })()
 ;
 //# sourceMappingURL=navigation.js.map

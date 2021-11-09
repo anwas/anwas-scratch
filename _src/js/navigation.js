@@ -1,10 +1,12 @@
 /* global anwas_scratch_screen_reader_text */
 /**
- * File navigation.js.
+ * Failas navigation.js.
  *
- * Handles toggling the navigation menu for small screens and enables TAB key
- * navigation support for dropdown menus.
+ * Valdo naršymo meniu perjungimą mažuose ekranuose ir įgalina TAB klavišo
+ * naršymo palaikymą išskleidžiamiesiems meniu.
  */
+
+import SEARCH_FORM_INIT from './_search-form';
 
 const KEYMAP = {
 	TAB: 9,
@@ -12,15 +14,17 @@ const KEYMAP = {
 };
 
 if ('loading' === document.readyState) {
-	// The DOM has not yet been loaded.
+	// DOM dar neužkrautas.
 	document.addEventListener('DOMContentLoaded', initNavigation);
 } else {
-	// The DOM has already been loaded.
+	// DOM jau užkrautas.
 	initNavigation();
 }
 
-// Initiate the menus when the DOM loads.
+// Inicijuoja meniu, kai DOM užkrautas.
 function initNavigation() {
+	SEARCH_FORM_INIT();
+
 	initNavToggleSubmenus();
 
 	const BODY_EL = document.querySelector('html > body');
@@ -37,13 +41,13 @@ function initNavigation() {
 }
 
 /**
- * Initiate the script to process all
- * navigation menus with submenu toggle enabled.
+ * Inicijuoja scenarijų, kad būtų apdoroti visi naršymo meniu,
+ * kai įjungtas submeniu perjungimas.
  */
 function initNavToggleSubmenus() {
 	const NAV_TOGGLE = document.querySelectorAll('.main-navigation');
 
-	// No point if no navs.
+	// Nėra prasmės tęsti, jei nėra meniu elemento.
 	if (!NAV_TOGGLE.length) {
 		return;
 	}
@@ -117,9 +121,9 @@ function initEachDropdown(nav) {
 
 
 /**
- * Toggle submenus open and closed, and tell screen readers what's going on.
- * @param {Object} parentMenuItem Parent menu element.
- * @param {boolean} forceToggle Force the menu toggle.
+ * Perjungia submeniu atidarymą ir uždarymą ir praneša ekrano skaitytuvams, kas vyksta.
+ * @param {Object} parentMenuItem Tėvinis meniu elementas.
+ * @param {boolean} forceToggle Priverstinai perjungti meniu.
  * @return {void}
  */
 function toggleSubMenu(parentMenuItem, forceToggle) {
@@ -132,42 +136,42 @@ function toggleSubMenu(parentMenuItem, forceToggle) {
 	const SUB_MENU = parentMenuItem.querySelector('ul');
 	let parentMenuItemToggled = parentMenuItem.classList.contains('menu-item--toggled-on');
 
-	// Will be true if we want to force the toggle on, false if force toggle close.
+	// Bus „true“, jei norime priverstinai įjungti, „false“, jei priverstinį perjungimą uždaryti.
 	if (undefined !== forceToggle && 'boolean' === (
 		typeof forceToggle
 	)) {
 		parentMenuItemToggled = !forceToggle;
 	}
 
-	// Toggle aria-expanded status.
+	// Perjungia aria-expanded būseną.
 	TOGGLE_BUTTON.setAttribute('aria-expanded', (
 		!parentMenuItemToggled
 	).toString());
 
 	/*
-	 * Steps to handle during toggle:
-	 * - Let the parent menu item know we're toggled on/off.
-	 * - Toggle the ARIA label to let screen readers know will expand or collapse.
+	 * Veiksmai, kuriuos reikia atlikti perjungimo metu:
+	 * - Pranešame pagrindiniam meniu elementui, kad įjungiame / išjungiame.
+	 * - Perjunti ARIA etiketę, kad ekrano skaitytuvai žinotų, kad išplėsta arba sutraukta.
 	 */
 	if (parentMenuItemToggled) {
-		// Toggle "off" the submenu.
+		// Perjunti "off" submeniu elementui.
 		parentMenuItem.classList.remove('menu-item--toggled-on');
 		SUB_MENU.classList.remove('toggle-show');
 		TOGGLE_BUTTON.setAttribute('aria-label', anwas_scratch_screen_reader_text.expand);
 
-		// Make sure all children are closed.
+		// Įsitikinti, kad visi vaikai yra uždaryti.
 		const SUB_MENU_ITEMS_TOGGLED = parentMenuItem.querySelectorAll('.menu-item--toggled-on');
 		for (let i = 0; i < SUB_MENU_ITEMS_TOGGLED.length; i++) {
 			toggleSubMenu(SUB_MENU_ITEMS_TOGGLED[i], false);
 		}
 	} else {
-		// Make sure siblings are closed.
+		// Įsitikinti, kad broliai ir seserys (siblings) yra uždaryti.
 		const PARENT_MENU_ITEMS_TOGGLED = parentMenuItem.parentNode.querySelectorAll('li.menu-item--toggled-on');
 		for (let i = 0; i < PARENT_MENU_ITEMS_TOGGLED.length; i++) {
 			toggleSubMenu(PARENT_MENU_ITEMS_TOGGLED[i], false);
 		}
 
-		// Toggle "on" the submenu.
+		// Perjunti "on" submeniu elementui.
 		parentMenuItem.classList.add('menu-item--toggled-on');
 		SUB_MENU.classList.add('toggle-show');
 		TOGGLE_BUTTON.setAttribute('aria-label', anwas_scratch_screen_reader_text.collapse);
@@ -178,7 +182,7 @@ function toggleSubMenu(parentMenuItem, forceToggle) {
 function actionCloseAllMenus() {
 	const NAV = document.querySelector('nav.main-navigation');
 
-	// No point if no nav menu.
+	// Nėra prasmės tęsti, jei nėra meniu.
 	if (!NAV) {
 		return;
 	}
