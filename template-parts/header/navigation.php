@@ -36,4 +36,6 @@ if ( ! Anwas_Scratch_Menus::is_primary_nav_menu_active() ) {
 		)
 	);
 	?>
+
+	<button class="search-toggle" aria-label="<?php esc_attr_e( 'Open search form', 'anwas-scratch' ); ?>" aria-controls="header-search-form" aria-expanded="false"><span class="search-toggle-text screen-reader-text"><?php esc_html_e( 'Open search form', 'anwas-scratch' ); ?></span><span class="dashicons dashicons-search"></span></button>
 </nav><!-- END #site-navigation .main-navigation -->

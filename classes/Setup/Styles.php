@@ -82,6 +82,9 @@ class Styles {
 			'anwas-scratch-global'     => array(
 				'file'   => '/assets/css/global.css',
 				'global' => true,
+				'deps'   => array(
+					'dashicons',
+				),
 			),
 			'anwas-scratch-front-page' => array(
 				'file'             => '/assets/css/front-page.css',

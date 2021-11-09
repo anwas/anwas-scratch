@@ -1,6 +1,8 @@
 $breakpoint__large-menu: 1000px;
 
 .main-navigation {
+	position: relative;
+
 	width: 100%;
 	background-color: $color__dark;
 
@@ -79,6 +81,11 @@ $breakpoint__large-menu: 1000px;
 
 	@media screen and ( min-width: $breakpoint__large-menu ) {
 		background-color: $color__dark;
+
+		// Flex naudojama, kad galima būtų papildomus navigacijos juostos elementus (socialinis meniu, paieškos formos perjungimo mygtukas, ir t.t.) lygiuoti dešinėje.
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
 
 		.menu-toggle {
 			display: none;

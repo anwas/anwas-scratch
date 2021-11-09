@@ -93,10 +93,12 @@ class Scripts {
 				'localize'    => array(
 					'obj_str' => 'anwas_scratch_screen_reader_text',
 					'data'    => array(
-						'expand'        => __( 'Expand child menu', 'anwas-scratch' ),
-						'collapse'      => __( 'Collapse child menu', 'anwas-scratch' ),
-						'expand_menu'   => __( 'Open menu', 'anwas-scratch' ),
-						'collapse_menu' => __( 'Collapse menu', 'anwas-scratch' ),
+						'expand'               => __( 'Expand child menu', 'anwas-scratch' ),
+						'collapse'             => __( 'Collapse child menu', 'anwas-scratch' ),
+						'expand_menu'          => __( 'Open menu', 'anwas-scratch' ),
+						'collapse_menu'        => __( 'Collapse menu', 'anwas-scratch' ),
+						'expand_search_form'   => __( 'Open search form', 'anwas-scratch' ),
+						'collapse_search_form' => __( 'Collapse search form', 'anwas-scratch' ),
 					),
 				),
 			),

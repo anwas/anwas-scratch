@@ -848,6 +848,7 @@ body.post, body.page {
 /* Navigation
 --------------------------------------------- */
 .main-navigation {
+  position: relative;
   width: 100%;
   background-color: #3e3e3e;
 }
@@ -905,6 +906,9 @@ body.post, body.page {
 @media screen and (min-width: 1000px) {
   .main-navigation {
     background-color: #3e3e3e;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
   .main-navigation .menu-toggle {
     display: none;
@@ -1066,6 +1070,75 @@ body.post, body.page {
 }
 .navigation.post-navigation .nav-previous .nav-links__sub {
   text-align: right;
+}
+
+/* Search
+--------------------------------------------- */
+input[type=search] {
+  width: 100%;
+}
+
+.search-toggle {
+  display: block;
+  border: none;
+  border-left: 1px solid #f0f0f0;
+  border-radius: 0;
+  padding: 0.875rem 1rem;
+  cursor: pointer;
+  background-color: #3e3e3e;
+  font-size: 1rem;
+  line-height: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.search-toggle[aria-expanded=true] {
+  background-color: #717171;
+}
+.search-toggle:hover {
+  background-color: #505050;
+}
+@media screen and (min-width: 1000px) {
+  .search-toggle {
+    position: static;
+  }
+}
+.search-toggle .dashicons-search {
+  color: #f0f0f0;
+}
+
+.header-search-form {
+  display: none;
+}
+.header-search-form.toggled {
+  display: block;
+}
+.header-search-form .search-form {
+  position: relative;
+}
+.header-search-form .search-form > label {
+  display: block;
+  padding: 1rem;
+  background-color: #717171;
+}
+.header-search-form .search-field {
+  padding-left: 10px;
+  padding-right: 120px;
+  border-color: #505050;
+  border-radius: 0;
+}
+.header-search-form .search-submit {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 3px 1rem;
+  width: 110px;
+  line-height: 1.5;
+  background-color: #505050;
+  color: #f0f0f0;
+  border-color: #505050;
+  border-radius: 0;
+  cursor: pointer;
 }
 
 /* Posts and pages

@@ -21,5 +21,7 @@ use \Anwas_Scratch\Setup\Custom_Logo as Anwas_Scratch_Custom_Logo;
 	get_template_part( 'template-parts/header/branding' ); // Viduje dar įtrauktas custom_header failas. Pagal pareikį struktūros išdėstymą galima paprastai keisti.
 
 	get_template_part( '/template-parts/header/navigation' );
+
+	get_template_part( '/template-parts/header/search_form' );
 	?>
 </header>
