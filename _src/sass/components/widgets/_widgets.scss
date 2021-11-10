@@ -1,8 +1,135 @@
-.widget {
+.widget,
+.widget_block {
 	margin: 0 0 1.5em;
+	padding-left: 1rem;
+	padding-right: 1rem;
 
 	// Make sure select elements fit in widgets.
 	select {
 		max-width: 100%;
+	}
+
+	a {
+		font-weight: 700;
+		color: #000;
+		text-decoration: none;
+
+		&:focus,
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	ul,
+	ol {
+		padding: 0;
+		margin: -1rem 0 0;
+		list-style-type: none;
+	}
+
+	li {
+		padding: 0.5rem 0 0;
+
+		ul,
+		ol {
+			margin-top: 0;
+		}
+
+		li {
+			margin-left: 1rem;
+		}
+	}
+
+	.wp-block-latest-comments__comment article > .wp-block-latest-comments__comment-meta,
+		.wp-block-latest-comments__comment article > .wp-block-latest-comments__comment-excerpt {
+		margin-left: 0;
+	}
+}
+
+.widget_block {
+	margin-bottom: 1rem;
+}
+
+.widget_block h1,
+.widget_block h2,
+.widget_block h3,
+.widget_block h4,
+.widget_block h5,
+.widget_block h6,
+.widget-title {
+	margin-bottom: 1rem;
+	font-size: 1.5rem;
+	border-bottom: 2px solid #000;
+}
+
+.widgets-area--footer {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax(320px, 1fr) );
+	justify-content: space-between;
+
+	row-gap: 0;
+	column-gap: 1rem;
+}
+
+.widgets-area {
+	.widget_archive > ul li::before,
+	.wp-block-archives-list li::before,
+	.widget_categories li::before,
+	.widget_recent_entries > ul li::before,
+	.widget_recent_comments > ul li::before {
+		display: block;
+		float: left;
+		margin-left: -1.25rem;
+		font-family: dashicons;
+	}
+
+	.widget_archive > ul li,
+	.wp-block-archives-list li,
+	.widget_categories li,
+	.widget_recent_entries > ul li,
+	.widget_recent_comments > ul li {
+		margin: 0 0 0 1.25rem;
+	}
+
+	.widget_archive > ul li::before,
+	.wp-block-archives-list li::before {
+		content: "\f480";
+	}
+
+	.widget_categories > ul li::before {
+		margin-top: -1px;
+		content: "\f318";
+	}
+
+	.widget_recent_entries > ul li::before {
+		margin-top: -1px;
+		content: "\f206";
+	}
+
+	.widget_recent_comments > ul li::before {
+		padding-top: 2px;
+		content: "\f101";
+	}
+
+	.wp-block-page-list,
+	.widget_pages,
+	.widget_nav_menu {
+		a {
+			display: block;
+			padding: 0.25rem;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+		}
+
+		li {
+			padding-top: 0;
+		}
+	}
+
+	.widget_rss {
+		.rss-date,
+		cite {
+			display: block;
+			font-size: 80%;
+		}
 	}
 }
