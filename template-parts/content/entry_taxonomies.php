@@ -19,7 +19,7 @@ $taxonomies = wp_list_filter(
 );
 
 ?>
-<div class="entry__taxonomies">
+<div class="entry-taxonomies entry__taxonomies">
 	<?php
 	$taxonomies_counter = 0;
 	// Rodyti visų su įrašu susijusių taksonomijų terminus.

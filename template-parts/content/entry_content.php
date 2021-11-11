@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Anwas_Scratch;
 
 ?>
-<div class="entry__content">
+<div class="entry-content entry__content">
 	<?php
 	the_content(
 		sprintf(

@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Anwas_Scratch;
 
 ?>
-<div class="entry__actions">
+<div class="entry-actions entry__actions">
 	<?php
 	if (
 		! is_singular( get_post_type() )

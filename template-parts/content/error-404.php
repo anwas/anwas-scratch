@@ -15,7 +15,7 @@ namespace Anwas_Scratch;
 <section class="page page--error">
 	<?php get_template_part( 'template-parts/content/page_header' ); ?>
 
-	<div class="page__content">
+	<div class="page-content page__content">
 		<p>
 			<?php esc_html_e( 'It looks like nothing was found at this location. Maybe try one of the links below or a search?', 'anwas-scratch' ); ?>
 		</p>

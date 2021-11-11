@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Anwas_Scratch;
 
 ?>
-<header class="entry__header">
+<header class="entry-header entry__header">
 	<?php
 	get_template_part( '/template-parts/content/entry_title', get_post_type() );
 

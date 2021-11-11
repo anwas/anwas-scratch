@@ -1143,12 +1143,16 @@ input[type=search] {
 
 /* Posts and pages
 --------------------------------------------- */
+.site-main {
+  padding: 0 1rem;
+}
+
 .sticky {
   display: block;
 }
 
-.post,
-.page {
+article.post,
+article.page {
   margin: 0 0 1.5em;
 }
 
