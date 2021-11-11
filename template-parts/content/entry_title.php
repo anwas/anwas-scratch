@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Anwas_Scratch;
 
 if ( is_singular() ) {
-	the_title( '<h1 class="entry__title entry__title--singular">', '</h1>', true );
+	the_title( '<h1 class="entry-title entry__title entry__title--singular">', '</h1>', true );
 } else {
-	the_title( '<h2 class="entry__title"><a href="' . esc_url( get_permalink() ) . '" class="entry__title-link" rel="bookmark">', '</a></h2>' );
+	the_title( '<h2 class="entry-title entry__title"><a href="' . esc_url( get_permalink() ) . '" class="entry__title-link" rel="bookmark">', '</a></h2>' );
 }

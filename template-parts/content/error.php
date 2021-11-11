@@ -15,7 +15,7 @@ namespace Anwas_Scratch;
 <section class="page page--error">
 	<?php get_template_part( 'template-parts/content/page_header' ); ?>
 
-	<div class="page__content">
+	<div class="page-content page__content">
 		<?php
 		if ( is_home() && current_user_can( 'publish_posts' ) ) {
 			?>

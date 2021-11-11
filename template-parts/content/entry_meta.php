@@ -56,7 +56,7 @@ if ( ! empty( $post->post_parent ) && 'attachment' === get_post_type() ) {
 }
 
 ?>
-<div class="entry__meta">
+<div class="entry-meta entry__meta">
 	<?php
 	if ( ! empty( $time_string ) ) {
 		?>

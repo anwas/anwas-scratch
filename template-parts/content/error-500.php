@@ -13,13 +13,13 @@ namespace Anwas_Scratch;
 
 ?>
 <section class="page page--error">
-	<header class="page__header">
-		<h1 class="page__title">
+	<header class="page-header page__header">
+		<h1 class="page-title page__title">
 			<?php esc_html_e( 'Oops! Something went wrong.', 'anwas-scratch' ); ?>
 		</h1>
 	</header><!-- END .page__header -->
 
-	<div class="page__content">
+	<div class="page-content page__content">
 		<?php
 		// Veikia, jei įjungtas AMP įskiepis.
 		// @link https://github.com/GoogleChromeLabs/pwa-wp/wiki/Service-Worker#offline--500-error-handling .

@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Anwas_Scratch;
 
 ?>
-<footer class="entry__footer">
+<footer class="entry-footer entry__footer">
 	<?php
 	get_template_part( 'template-parts/content/entry_taxonomies', get_post_type() );
 
