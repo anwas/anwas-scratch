@@ -1151,9 +1151,20 @@ input[type=search] {
   display: block;
 }
 
-article.post,
-article.page {
-  margin: 0 0 1.5em;
+.entry {
+  margin-bottom: 2rem;
+}
+
+.entry__header {
+  margin-bottom: 1rem;
+}
+
+.entry__title {
+  margin-bottom: 0;
+}
+
+.entry__meta {
+  font-size: 0.85rem;
 }
 
 .entry__content::before, .entry__content::after,
@@ -1175,12 +1186,28 @@ article.page {
 .page-content,
 .entry-content,
 .entry-summary {
-  margin: 1.5em 0 0;
+  margin: 1rem 0 0;
+}
+
+.entry__footer {
+  margin-top: 1.5rem;
 }
 
 .page-links {
-  clear: both;
   margin: 0 0 1.5em;
+}
+.page-links::before, .page-links::after {
+  content: "";
+  display: table;
+  table-layout: fixed;
+}
+.page-links::after {
+  clear: both;
+}
+
+.post-thumbnail {
+  display: block;
+  margin-top: 1.5rem;
 }
 
 /* Comments
