@@ -6,9 +6,20 @@
 	display: block;
 }
 
-article.post,
-article.page {
-	margin: 0 0 1.5em;
+.entry {
+	margin-bottom: 2rem;
+}
+
+.entry__header {
+	margin-bottom: 1rem;
+}
+
+.entry__title {
+	margin-bottom: 0;
+}
+
+.entry__meta {
+	font-size: 0.85rem;
 }
 
 // TODO: išsiaiškinti ar šita taisyklė nesugadina full-width ir wide taisyklių veikimo.
@@ -25,10 +36,19 @@ article.page {
 .page-content,
 .entry-content,
 .entry-summary {
-	margin: 1.5em 0 0;
+	margin: 1rem 0 0;
+}
+
+.entry__footer {
+	margin-top: 1.5rem;
 }
 
 .page-links {
-	clear: both;
+	@include clearfix-full();
 	margin: 0 0 1.5em;
+}
+
+.post-thumbnail {
+	display: block;
+	margin-top: 1.5rem;
 }
