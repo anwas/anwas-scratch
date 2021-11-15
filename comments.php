@@ -50,21 +50,28 @@ if ( post_password_required() ) {
 			?>
 		</h2><!-- END .comments-title -->
 
-		<?php the_comments_navigation(); ?>
-
 		<ol class="comment-list">
 			<?php
 			wp_list_comments(
 				array(
-					'style'      => 'ol',
-					'short_ping' => true,
+					'style'       => 'ol',
+					'short_ping'  => true,
+					'avatar_size' => 48, // numatytasis dydis 32. Jeigu 0 – avatarai išjungti.
 				)
 			);
 			?>
 		</ol><!-- END .comment-list -->
 
 		<?php
-		the_comments_navigation();
+		the_comments_navigation(
+			array(
+				'prev_text'          => sprintf( '<span class="dashicons dashicons-arrow-left-alt"></span>%s', esc_html__( 'Older comments', 'anwas-scratch' ) ),
+				'next_text'          => sprintf( '%s<span class="dashicons dashicons-arrow-right-alt"></span>', esc_html__( 'Newer comments', 'anwas-scratch' ) ),
+				'screen_reader_text' => __( 'Comments navigation', 'anwas-scratch' ),
+				'aria_label'         => __( 'Comments', 'anwas-scratch' ),
+				'class'              => 'comment-navigation',
+			)
+		);
 
 		// Jei komentavimas išjungtas, bet yra komentarų, paliekame trumpą žinutę.
 		if ( ! comments_open() ) :
