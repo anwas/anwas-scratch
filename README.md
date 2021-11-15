@@ -13,7 +13,7 @@ Tarkime, kad norite pavadinti temą „Nauja Tema“, komandinėje eilute pereik
 
 1.
 ```
-find ./ -type f -exec sed -i 's/Anwas_Scratch_/Nauja_Tema/g' {} \;
+find ./ -type f -exec sed -i 's/Anwas_Scratch/Nauja_Tema/g' {} \;
 ```
 2.
 ```
