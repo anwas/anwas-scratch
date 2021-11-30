@@ -102,9 +102,9 @@ final class Init {
 	/**
 	 * Privatus _clone metodas blokuoja klasės egzempliorių klonavimą.
 	 *
-	 * @return void
+	 * Pastaba: šis metodas negali deklaruoti grąžinimo tipo (bent jau PHP 7.4 wp-cli gaunama klaida).
 	 */
-	private function __clone(): void {}
+	private function __clone() {}
 
 	/**
 	 * Privatus __wakeup metodas blokuoja klasės egzempliorių išserializavimą.
