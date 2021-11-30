@@ -13,15 +13,20 @@ namespace Anwas_Scratch;
 
 use \Anwas_Scratch\Setup\Custom_Logo as Anwas_Scratch_Custom_Logo;
 
-$branding_bg     = get_theme_mod( 'anwas_scratch_branding_bg', '#2c86ba' );
-$header_bg_class = '';
+$branding_bg               = get_theme_mod( 'anwas_scratch_branding_bg', '#2c86ba' );
+$anwas_scratch_description = get_bloginfo( 'description', 'display' );
+$site_branding_classes     = 'site-branding';
+
+if ( $anwas_scratch_description ) {
+	$site_branding_classes .= ' has-site-description';
+}
 ?>
 <style>
 	.site-branding {
 		background-color: <?php echo esc_attr( $branding_bg ); ?>;
 		<?php
 		if ( has_header_image() && 'blank' !== get_header_textcolor() ) {
-			$header_bg_class = ' header-background-image';
+			$site_branding_classes .= ' header-background-image';
 			?>
 			background-image: url( <?php header_image(); ?> );
 			<?php
@@ -30,7 +35,7 @@ $header_bg_class = '';
 	}
 </style>
 
-<div class="site-branding<?php echo $header_bg_class; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
+<div class="<?php echo $site_branding_classes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 	<div class="site-title-box">
 		<?php
 		Anwas_Scratch_Custom_Logo::display_custom_logo();
@@ -45,7 +50,6 @@ $header_bg_class = '';
 			<?php
 		}
 
-		$anwas_scratch_description = get_bloginfo( 'description', 'display' );
 		if ( $anwas_scratch_description || is_customize_preview() ) {
 			?>
 			<p class="site-description">

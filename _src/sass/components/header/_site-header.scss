@@ -43,6 +43,23 @@
 		width: 600px;
 		max-width: 75%;
 		margin: 0 auto;
+
+		.wp-custom-logo & {
+			display: grid;
+			grid-template-columns: auto 1fr;
+			grid-template-rows: 1fr;
+
+			grid-template-areas:
+				"custom-logo site-title";
+		}
+
+		.wp-custom-logo .has-site-description & {
+			grid-template-rows: 1fr 1fr;
+
+			grid-template-areas:
+				"custom-logo site-title"
+				"custom-logo site-description";
+		}
 	}
 }
 
@@ -53,13 +70,43 @@
 	text-decoration: none;
 	line-height: normal;
 	padding-bottom: 0.5rem;
+	margin: 0;
+
+	.wp-custom-logo & {
+		grid-area: site-title;
+		align-self: center;
+	}
+
+	.wp-custom-logo .has-site-description & {
+		align-self: end;
+	}
 
 	a {
 		color: #fff;
+		text-decoration: none;
+
+		&:focus,
+		&:hover {
+			text-decoration: underline;
+		}
 	}
 }
 
 .site-description {
 	font-weight: 100;
 	font-size: 1.5rem;
+
+	.wp-custom-logo & {
+		grid-area: site-description;
+		align-self: center;
+	}
+}
+
+.custom-logo-link {
+	grid-area: custom-logo;
+	margin-bottom: 1rem;
+
+	@media screen and (min-width: 640px) {
+		margin-bottom: 0;
+	}
 }
