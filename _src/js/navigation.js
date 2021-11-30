@@ -208,7 +208,13 @@ function actionCloseAllMenus() {
 		MENU_TOOGLE.setAttribute('aria-expanded', 'false');
 	}
 
-	MENU_TOOGLE.focus();
+	// TODO: sugalvoti, kaip teisingai padaryti meniu perjungimo mygtuko fokusavimą, kai spaudžiama už meniu ribų.
+	// const SEARCH_TOGGLE = document.querySelector('.search-toggle');
+	// const SEARCH_CONTAINER = document.querySelector('.header-search-form');
+
+	// if (SEARCH_TOGGLE && SEARCH_CONTAINER && !SEARCH_CONTAINER.classList.contains('toggled')) {
+	// 	MENU_TOOGLE.focus();
+	// }
 
 	const PARENT_MENU_ITEMS_TOGGLED = NAV.querySelectorAll('.menu li.menu-item--toggled-on');
 

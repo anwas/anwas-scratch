@@ -155,6 +155,10 @@ $breakpoint__large-menu: 1000px;
 	padding: 1rem;
 
 	cursor: pointer;
+
+	&:focus {
+		outline: 1px solid $color__gray-100;
+	}
 }
 
 // Tuščias <span> elementas <a> elemento viduje už teksto.
