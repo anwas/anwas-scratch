@@ -6,12 +6,12 @@
 
 'use strict';
 
-if ('loading' === document.readyState) {
+if ( 'loading' === document.readyState ) {
 	// DOM dar neįkeltas.
-	document.addEventListener('DOMContentLoaded', initThemeMainScripts);
+	document.addEventListener( 'DOMContentLoaded', initThemeMainScripts );
 } else {
 	// DOM jau įkeltas.
 	initThemeMainScripts();
 }
 
-function initThemeMainScripts() { }
+function initThemeMainScripts() {}
